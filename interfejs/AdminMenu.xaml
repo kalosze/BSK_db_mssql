@@ -1,0 +1,33 @@
+﻿<Window x:Class="interfejs.AdminMenu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:interfejs"
+        mc:Ignorable="d"
+        Title="Zarządzanie użytkownikami" Height="202.785" Width="324.762" ResizeMode="NoResize">
+    <Grid>
+        <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="10,29,0,0" VerticalAlignment="Top" Width="120">
+            <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="User1"/>
+            <TextBlock x:Name="textBlock1" TextWrapping="Wrap" Text="User2"/>
+        </ComboBox>
+        <Label x:Name="label" Content="Użytkownik:" HorizontalAlignment="Left" Margin="10,3,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="button" Content="OK" HorizontalAlignment="Left" Margin="31,0,0,19" Width="74"  Height="27" VerticalAlignment="Bottom" Click="button_Click"/>
+        <Button x:Name="button1" Content="Anuluj" Margin="0,0,31,19" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75"/>
+        <Button x:Name="button2" Content="Usuń użytkownika" HorizontalAlignment="Left" Margin="10,83,0,0" VerticalAlignment="Top" Width="106" Height="22"/>
+        <Button x:Name="button3" Content="Dodaj użytkownika" HorizontalAlignment="Left" Margin="10,56,0,0" VerticalAlignment="Top" Width="106" Height="22" Click="button3_Click"/>
+        <Grid Height="83" Margin="135,10,9,0" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="52*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Slider x:Name="slider" Margin="13,48,0,5" Maximum="3" SmallChange="1" TickPlacement="TopLeft" IsSnapToTickEnabled="True" IsHitTestVisible="True" HorizontalAlignment="Left" Width="140"/>
+            <Label x:Name="label1" Content="Poziom uprawnień:" Margin="15,0,31,57"/>
+            <Label x:Name="label3" Content="3" Margin="140,26,0,31" HorizontalAlignment="Left" Width="16"/>
+            <Label x:Name="label4" Content="2" Margin="97,26,0,31" HorizontalAlignment="Left" Width="16"/>
+            <Label x:Name="label5" Content="1" Margin="53,26,0,31" HorizontalAlignment="Left" Width="16"/>
+            <Label x:Name="label6" Content="0" Margin="10,26,0,31" RenderTransformOrigin="0.554,0.356" HorizontalAlignment="Left" Width="16"/>
+        </Grid>
+
+    </Grid>
+</Window>
