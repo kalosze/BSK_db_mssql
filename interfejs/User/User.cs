@@ -14,7 +14,7 @@ namespace interfejs
         public string surname { get; set; }
         int accesLvl { get; set;}
         //moze zadziala statyczna tablica uzytkownikow
-        public static List<User> Users;
+        //public static List<User> Users;
 
         //Konstruktor uzytkownika
         public User(string login, string pass, string name, string surname, int accesLvl)
@@ -25,6 +25,5 @@ namespace interfejs
             this.surname = surname;
             this.accesLvl = accesLvl;
         }
-
     }
 }

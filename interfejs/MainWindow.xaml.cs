@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Data.SqlClient;
+
 
 namespace interfejs
 {
@@ -20,12 +22,33 @@ namespace interfejs
     /// </summary>
     public partial class MainWindow : Window
     {
+        //Użytkownik aktualnie zalogowany
         public CurrentUser usr { get; set; }
+
+        //Nasza baza danych
+        String dbServer;
+        SqlConnection dbConnection;
         public MainWindow()
         {
             InitializeComponent();
             /*for(var i = 0; i <10;++i)
                 dataGrid.Items.Add(new kruwa() { Kolumna1 = "dana 1", Kolumna2 = "dana 2", Kolumna3 = "dana 3" });*/
+            dbServer = "server=MUNESH-PC;database=windowapp;UID=sa;password=123";
+
+            String query = "select * from data";
+            try
+            {
+                dbConnection = new SqlConnection(dbServer);
+                
+                //SqlCommand cmd = new SqlCommand(query, dbConnection);
+                dbConnection.Open();
+                dbConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+                this.Close();
+            }
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
