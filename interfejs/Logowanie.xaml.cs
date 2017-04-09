@@ -19,16 +19,36 @@ namespace interfejs
     /// </summary>
     public partial class Logowanie : Window
     {
+        string pass { get; set; }
+        string login { get; set; }
+        //public CurrentUser usr { get; set; }
         public Logowanie()
         {
             InitializeComponent();
         }
+        
+           
 
         private void logInButton_Click(object sender, RoutedEventArgs e)
         {
-            var d = new MainWindow();
-            d.Show();
-            this.Close();
+            login = this.loginBox.Text;
+            pass = this.passwordBox.Password;
+            //wycyckanie użytkownika z bazy danych
+            //TO DO
+            MainWindow mainWindow = Owner as MainWindow;
+            mainWindow.usr =  new CurrentUser(login, pass, "Chuj", "Kutas", 5);
+            //var d = new MainWindow();
+            //d.Show();
+
+            //jeśli się udało
+            if (mainWindow != null)
+            {
+                this.Close();
+            }
+            else
+            {
+                errorInfo.Visibility = Visibility.Visible;
+            }
         }
     }
 }

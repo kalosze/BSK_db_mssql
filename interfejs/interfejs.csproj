@@ -62,12 +62,14 @@
     <Compile Include="AddNewRecord.xaml.cs">
       <DependentUpon>AddNewRecord.xaml</DependentUpon>
     </Compile>
+    <Compile Include="User\CurrentUser.cs" />
     <Compile Include="tableControl.xaml.cs">
       <DependentUpon>tableControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Search.xaml.cs">
       <DependentUpon>Search.xaml</DependentUpon>
     </Compile>
+    <Compile Include="User\User.cs" />
     <Page Include="AddNewRecord.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

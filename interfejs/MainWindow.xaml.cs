@@ -20,11 +20,12 @@ namespace interfejs
     /// </summary>
     public partial class MainWindow : Window
     {
+        public CurrentUser usr { get; set; }
         public MainWindow()
         {
             InitializeComponent();
-            for(var i = 0; i <10;++i)
-                dataGrid.Items.Add(new kruwa() { Kolumna1 = "dana 1", Kolumna2 = "dana 2", Kolumna3 = "dana 3" });
+            /*for(var i = 0; i <10;++i)
+                dataGrid.Items.Add(new kruwa() { Kolumna1 = "dana 1", Kolumna2 = "dana 2", Kolumna3 = "dana 3" });*/
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
@@ -39,12 +40,24 @@ namespace interfejs
             a.Show();
         }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
+        private void loginClick(object sender, RoutedEventArgs e)
         {
-            
-            var b = new Logowanie();
-            b.Show();
-            this.Close();
+            if (usr == null)
+            {
+                var b = new Logowanie();
+                b.Owner = this;
+                //b.usr = usr;
+                b.ShowDialog();
+                this.loginButton.Content = "Wyloguj";
+                this.ktoZalogowany.Content = $"Witaj: {usr.name} {usr.surname}";
+            }
+            else
+            {
+                usr = null;
+                this.loginButton.Content = "Zaloguj";
+                this.ktoZalogowany.Content = "";
+            }
+            //this.Close();
         }
 
         private void button3_Click(object sender, RoutedEventArgs e)
@@ -65,12 +78,12 @@ namespace interfejs
         }
     }
 
-    public class kruwa
+    /*public class kruwa
     {
         public string Kolumna1 { get; set; }
         public string Kolumna2 { get; set; }
         public string Kolumna3 { get; set; }
-    }
+    }*/
 
 
 }

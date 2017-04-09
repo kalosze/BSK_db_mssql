@@ -5,13 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:interfejs"
         mc:Ignorable="d"
-        Title="Logowanie" Height="136.607" Width="212.295" ResizeMode="NoResize">
+        Title="Logowanie" Height="153.788" Width="212.295" ResizeMode="NoResize">
     <Grid>
-        <TextBox x:Name="login" HorizontalAlignment="Left" Height="24" Margin="62,10,0,0" TextWrapping="Wrap" Text="login" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="loginBox" HorizontalAlignment="Left" Height="24" Margin="62,10,0,0" TextWrapping="Wrap" Text="login" VerticalAlignment="Top" Width="120"/>
         <PasswordBox x:Name="passwordBox" HorizontalAlignment="Left" Margin="62,39,0,0" VerticalAlignment="Top" Width="120" Height="24"/>
-        <Button x:Name="logInButton" Content="zaloguj" HorizontalAlignment="Left" Margin="55,68,0,0" VerticalAlignment="Top" Width="75" Click="logInButton_Click"/>
+        <Button x:Name="logInButton" Content="zaloguj" HorizontalAlignment="Left" Margin="62,89,0,0" VerticalAlignment="Top" Width="75" Click="logInButton_Click"/>
         <Label x:Name="label" Content="login:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="28"/>
         <Label x:Name="label1" Content="hasło:" HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top" Height="31" />
+        <Label x:Name="errorInfo" Content="zły login lub hasło!" HorizontalAlignment="Left" Margin="51,63,0,0" VerticalAlignment="Top" FontSize="10" Visibility="Hidden"/>
 
     </Grid>
 </Window>
