@@ -37,11 +37,9 @@ namespace interfejs
             //TO DO
             MainWindow mainWindow = Owner as MainWindow;
             mainWindow.usr =  new CurrentUser(login, pass, "Chuj", "Kutas", 5);
-            //var d = new MainWindow();
-            //d.Show();
 
             //jeśli się udało
-            if (mainWindow != null)
+            if (mainWindow.usr != null)
             {
                 this.Close();
             }
