@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data.SqlClient;
+using static interfejs.Database;
 
 
 namespace interfejs
@@ -59,6 +60,7 @@ namespace interfejs
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show(ex.Message);
+                dbConnection.Close();
                 this.Close();
             }
         }
@@ -66,8 +68,9 @@ namespace interfejs
         //Dodawanie nowych rekordów
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            var b = new AddNewRecord();
-            b.Show();
+            var b = new AddNewRecord(wybieranieTabeli.SelectedItem.ToString());
+            b.ShowDialog();
+            dataGrid.Items.Refresh();
         }
 
         //guzik zarządzania użytkownikai
@@ -102,6 +105,15 @@ namespace interfejs
                     }
                     this.loginButton.Content = "Wyloguj";
                     this.ktoZalogowany.Content = $"Witaj: {usr.name} {usr.surname}";
+                    dodawanieRekorduBtn.IsEnabled = false;
+                    usunBtn.IsEnabled = false;
+
+                    /* dropdown lista tabel z fejkowej bazy danych */
+                    var tables = Enum.GetNames(typeof(TabeleEnum));
+                    foreach (var table in tables)
+                    {
+                        wybieranieTabeli.Items.Add(table);
+                    }
                 }
             }
             else
@@ -118,6 +130,9 @@ namespace interfejs
                         o.Visibility = Visibility.Hidden;
                     }
                 }
+                dataGrid.ItemsSource = null;
+                wybieranieTabeli.Items.Clear();
+
                 usr = null;
                 this.loginButton.Content = "Zaloguj";
                 this.ktoZalogowany.Content = "";
@@ -135,13 +150,41 @@ namespace interfejs
         //usuwanie rekordów
         private void usunClick(object sender, RoutedEventArgs e)
         {
-
+            var selected = dataGrid.SelectedItem;
+            var tables = Enum.GetNames(typeof(TabeleEnum));
+            foreach (var table in tables)
+            {
+                if (wybieranieTabeli.SelectedItem.Equals(table))
+                {
+                    Database.tabele[(int)Enum.Parse(typeof(TabeleEnum), table)].Item2.Remove(selected);
+                    dataGrid.Items.Refresh();
+                    return;
+                }
+            }
         }
 
         private void button5_Click(object sender, RoutedEventArgs e)
         {
             var b = new tableControl();
             b.Show();
+        }
+
+         private void ComboBox_ChangeTable(object sender, SelectionChangedEventArgs e)
+        {
+            dodawanieRekorduBtn.IsEnabled = true;
+            usunBtn.IsEnabled = true;
+            if (e.AddedItems.Count == 0) return;
+            var tables = Enum.GetNames(typeof(TabeleEnum));
+            foreach (var table in tables)
+            {
+                if (wybieranieTabeli.SelectedItem.Equals(table))
+                {
+                    dataGrid.Columns.Clear();
+                    dataGrid.ItemsSource = Database.tabele[(int)Enum.Parse(typeof(TabeleEnum), table)].Item2;
+
+                    return;
+                }
+            }
         }
     }
 

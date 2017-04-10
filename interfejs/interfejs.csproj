@@ -62,6 +62,7 @@
     <Compile Include="AddNewRecord.xaml.cs">
       <DependentUpon>AddNewRecord.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Database.cs" />
     <Compile Include="User\CurrentUser.cs" />
     <Compile Include="tableControl.xaml.cs">
       <DependentUpon>tableControl.xaml</DependentUpon>
