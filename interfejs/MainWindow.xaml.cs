@@ -46,15 +46,15 @@ namespace interfejs
             kontrolkiAdmin.Add(this.zarzadzanieUzytkownikamiBtn);
             /*for(var i = 0; i <10;++i)
                 dataGrid.Items.Add(new kruwa() { Kolumna1 = "dana 1", Kolumna2 = "dana 2", Kolumna3 = "dana 3" });*/
-            dbServer = "server=MUNESH-PC;database=windowapp;UID=sa;password=123";
-            String query = "select * from data";
+            dbServer = "server=MICHAL-PC;database=BSK;Trusted_Connection=true";
+           // String query = "select * from data";
             try
             {
                 dbConnection = new SqlConnection(dbServer);
                 
                 //SqlCommand cmd = new SqlCommand(query, dbConnection);
-                /*dbConnection.Open();
-                dbConnection.Close();*/
+                dbConnection.Open();
+                dbConnection.Close();
             }
             catch (Exception ex)
             {
@@ -63,18 +63,21 @@ namespace interfejs
             }
         }
 
+        //Dodawanie nowych rekordów
         private void button_Click(object sender, RoutedEventArgs e)
         {
             var b = new AddNewRecord();
             b.Show();
         }
 
+        //guzik zarządzania użytkownikai
         private void button2_Click(object sender, RoutedEventArgs e)
         {
             var a = new AdminMenu(dbConnection);
             a.Show();
         }
 
+        //Guzik logowania
         private void loginClick(object sender, RoutedEventArgs e)
         {
             if (usr == null)
@@ -122,13 +125,15 @@ namespace interfejs
             //this.Close();
         }
 
+        //Guzik szukania rekordów
         private void button3_Click(object sender, RoutedEventArgs e)
         {
             var b = new Search();
             b.Show();
         }
 
-        private void button4_Click(object sender, RoutedEventArgs e)
+        //usuwanie rekordów
+        private void usunClick(object sender, RoutedEventArgs e)
         {
 
         }
@@ -139,13 +144,5 @@ namespace interfejs
             b.Show();
         }
     }
-
-    /*public class kruwa
-    {
-        public string Kolumna1 { get; set; }
-        public string Kolumna2 { get; set; }
-        public string Kolumna3 { get; set; }
-    }*/
-
 
 }

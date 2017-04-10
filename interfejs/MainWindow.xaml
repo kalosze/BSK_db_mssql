@@ -29,7 +29,7 @@
         <Button x:Name="loginButton" Content="Zaloguj" VerticalAlignment="Top" Click="loginClick" HorizontalAlignment="Right" Width="75"/>
         <Button x:Name="zarzadzanieUzytkownikamiBtn" Content="Zarządzanie użytkownikami" Margin="0,0,80,0" VerticalAlignment="Top" Click="button2_Click" HorizontalAlignment="Right" Width="164" Visibility="Hidden" IsEnabled="False"/>
         <Button x:Name="szukajBtn" IsEnabled="False" Content="Wyszukaj" HorizontalAlignment="Left" Margin="163,34,0,0" VerticalAlignment="Top" Width="75" Click="button3_Click"/>
-        <Button x:Name="usunBtn" IsEnabled="False" Content="Usuń rekord" HorizontalAlignment="Left" Margin="163,0,0,10" Width="75" Click="button4_Click" Height="20" VerticalAlignment="Bottom"/>
+        <Button x:Name="usunBtn" IsEnabled="False" Content="Usuń rekord" HorizontalAlignment="Left" Margin="163,0,0,10" Width="75" Click="usunClick" Height="20" VerticalAlignment="Bottom"/>
         <Button x:Name="zarzadzanieTabelamiBtn" Content="Zarządzanie tabelami" Margin="0,0,249,0" VerticalAlignment="Top" Click="button5_Click" HorizontalAlignment="Right" Width="130" Visibility="Hidden" IsEnabled="False"/>
         <Label x:Name="ktoZalogowany" Content="" Margin="273,20,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" />
     </Grid>

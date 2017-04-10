@@ -36,13 +36,29 @@ namespace interfejs
         {
             try
             {
-                String cmd;
+                if (this.pass1.Password == this.pass2.Password)
+                {
+                    String query = $"INSERT INTO UZYTKOWNIK (LOGIN, HASLO, IMIE, NAZWISKO, STANOWISKO, ETYKIETA) VALUES "+
+                        $"('{this.login.Text}', "+
+                        $"'{this.pass1.Password}', "+
+                        $"'{this.imie.Text}', "+
+                        $"'{this.nazwisko.Text}', "+
+                        $"'{this.listaStanowisk.Text}', "+
+                        $"5)";
+                    SqlCommand cmd = new SqlCommand(query, dbConnection);
+                    dbConnection.Open();
+                    cmd.ExecuteNonQuery();
+                    dbConnection.Close();
+
+                }
 
             }
-            catch
+            catch (Exception ex)
             {
-
+                MessageBox.Show(ex.Message);
+                dbConnection.Close();
             }
+            this.Close();
         }
     }
 }
