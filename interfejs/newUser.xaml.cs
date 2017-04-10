@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,9 +20,28 @@ namespace interfejs
     /// </summary>
     public partial class newUser : Window
     {
-        public newUser()
+        SqlConnection dbConnection;
+        public newUser(SqlConnection con) : base()
         {
             InitializeComponent();
+            dbConnection = con;
+        }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                String cmd;
+            }
+            catch
+            {
+
+            }
         }
     }
 }

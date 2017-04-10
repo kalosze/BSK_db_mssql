@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,15 +20,17 @@ namespace interfejs
     /// </summary>
     public partial class AdminMenu : Window
     {
-        public AdminMenu()
+        SqlConnection dbConnection;
+        public AdminMenu(SqlConnection con) : base()
         {
             InitializeComponent();
+            dbConnection = con;
         }
 
-        private void button3_Click(object sender, RoutedEventArgs e)
+        private void addNewUserClick(object sender, RoutedEventArgs e)
         {
-            var c = new newUser();
-            c.Show();
+            var c = new newUser(dbConnection);
+            c.ShowDialog();
         }
 
         private void button_Click(object sender, RoutedEventArgs e)

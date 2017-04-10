@@ -214,7 +214,7 @@ namespace interfejs {
             this.button3 = ((System.Windows.Controls.Button)(target));
             
             #line 18 "..\..\AdminMenu.xaml"
-            this.button3.Click += new System.Windows.RoutedEventHandler(this.button3_Click);
+            this.button3.Click += new System.Windows.RoutedEventHandler(this.addNewUserClick);
             
             #line default
             #line hidden

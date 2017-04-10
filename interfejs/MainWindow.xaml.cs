@@ -41,8 +41,8 @@ namespace interfejs
                 dbConnection = new SqlConnection(dbServer);
                 
                 //SqlCommand cmd = new SqlCommand(query, dbConnection);
-                dbConnection.Open();
-                dbConnection.Close();
+                /*dbConnection.Open();
+                dbConnection.Close();*/
             }
             catch (Exception ex)
             {
@@ -59,7 +59,7 @@ namespace interfejs
 
         private void button2_Click(object sender, RoutedEventArgs e)
         {
-            var a = new AdminMenu();
+            var a = new AdminMenu(dbConnection);
             a.Show();
         }
 
