@@ -39,7 +39,7 @@ namespace interfejs
             updateUsers();
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private void okBtn_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -50,9 +50,9 @@ namespace interfejs
                 {
                     query = $"UPDATE UZYTKOWNIK SET ETYKIETA='{u.etykieta}' WHERE [ID_UZYTKOWNIKA] like '{u.id}'";
                     cmd = new SqlCommand(query, dbConnection);
-                    
+
                     cmd.ExecuteNonQuery();
-                    
+
                 }
                 dbConnection.Close();
             }
@@ -66,12 +66,12 @@ namespace interfejs
 
         private void listaUzytkownikow_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            foreach(var u in users)
+            foreach (var u in users)
             {
-                if(listaUzytkownikow.SelectedItem!= null && u.login == this.listaUzytkownikow.SelectedItem.ToString())
+                if (listaUzytkownikow.SelectedItem != null && u.login == this.listaUzytkownikow.SelectedItem.ToString())
                 {
                     selected = u;
-                    sliderEtykiet.IsEnabled = true; 
+                    sliderEtykiet.IsEnabled = true;
                     sliderEtykiet.Value = selected.etykieta;
                 }
             }
@@ -79,11 +79,11 @@ namespace interfejs
 
         private void sliderEtykiet_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if(listaUzytkownikow.SelectedItem != null)
-                selected.etykieta =(int)(sliderEtykiet.Value);
+            if (listaUzytkownikow.SelectedItem != null)
+                selected.etykieta = (int)(sliderEtykiet.Value);
         }
 
-        private void button2_Click(object sender, RoutedEventArgs e)
+        private void usunBtn_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -109,7 +109,7 @@ namespace interfejs
             }
         }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
+        private void anulujBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
@@ -120,23 +120,35 @@ namespace interfejs
             listaUzytkownikow.Items.Clear();
             try
             {
+                //wiadomka
                 String query = $"SELECT * FROM UZYTKOWNIK";
+                //zbinduj skrypt sql z połączeniem do sqlcommanda
                 SqlCommand cmd = new SqlCommand(query, dbConnection);
+                //uchwyt na okno główne
                 MainWindow mainWindow = Owner as MainWindow;
+                //otwieramy połączenie z bazą danych
                 dbConnection.Open();
+                //wykonujemy skrypt na bazie danych
                 cmd.ExecuteNonQuery();
                 SqlDataReader reader;
+                //baza danych zwróciła wynik zapytania i przerzucamy odpowiedź na reader'a
                 reader = cmd.ExecuteReader();
 
+                //póki mamy dane to je odczytuj (każde wywołanie read bieże kolejny wiersz)
                 while (reader.Read())
                 {
+                    //tworzymy użytkowników na podstawie danych z bazy danych (reader.get[tutaj typ zmiennej (string int itp)]([tutaj podajemy z której kolumny odczytać dane])
                     var user = new CurrentUser(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetInt32(6));
+                    //dodajemy do listy użytkowników
                     users.Add(user);
 
                 }
+                //jak skończylyśmy to zamykamy reader'a 
                 reader.Close();
+                //i połączenie z bazą danych
                 dbConnection.Close();
 
+                //tutaj dodajemy wszystkich użytkowników to combo boxa (rozwijanej listy)()tzn nie userów a same loginy
                 foreach (var u in users)
                 {
                     this.listaUzytkownikow.Items.Add(u.login);
@@ -145,6 +157,7 @@ namespace interfejs
             }
             catch (Exception ex)
             {
+                //obsługa błedów
                 MessageBox.Show(ex.Message);
                 dbConnection.Close();
             }
