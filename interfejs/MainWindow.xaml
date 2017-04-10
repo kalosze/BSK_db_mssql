@@ -22,17 +22,15 @@
         <Menu x:Name="menu" HorizontalAlignment="Left" Height="20" Margin="-133,154,0,0" VerticalAlignment="Top" Width="40">
             <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="Usuń"/>
         </Menu>
-        <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" Width="120">
-            <TextBlock x:Name="textBlock1" TextWrapping="Wrap" Text="Tabela1" />
-            <TextBlock x:Name="textBlock2" TextWrapping="Wrap" Text="Tabela2"/>
+        <ComboBox x:Name="wybieranieTabeli" HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" Width="120" IsEnabled="False">
         </ComboBox>
-        <Label x:Name="label" Content="Tabela:" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="button" Content="Dodaj nowy rekord" Margin="10,0,0,10" HorizontalAlignment="Left" Width="120" Height="20" VerticalAlignment="Bottom" Click="button_Click"/>
+        <Label x:Name="labelTabela" Content="Tabela:" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="dodawanieRekorduBtn" Content="Dodaj nowy rekord" Margin="10,0,0,10" HorizontalAlignment="Left" Width="120" Height="20" VerticalAlignment="Bottom" Click="button_Click" IsEnabled="False"/>
         <Button x:Name="loginButton" Content="Zaloguj" VerticalAlignment="Top" Click="loginClick" HorizontalAlignment="Right" Width="75"/>
-        <Button x:Name="button2" Content="Zarządzanie użytkownikami" Margin="0,0,80,0" VerticalAlignment="Top" Click="button2_Click" HorizontalAlignment="Right" Width="164"/>
-        <Button x:Name="button3" Content="Wyszukaj" HorizontalAlignment="Left" Margin="163,34,0,0" VerticalAlignment="Top" Width="75" Click="button3_Click"/>
-        <Button x:Name="button4" Content="Usuń rekord" HorizontalAlignment="Left" Margin="163,0,0,10" Width="75" Click="button4_Click" Height="20" VerticalAlignment="Bottom"/>
-        <Button x:Name="button5" Content="Zarządzanie tabelami" Margin="0,0,249,0" VerticalAlignment="Top" Click="button5_Click" HorizontalAlignment="Right" Width="130"/>
+        <Button x:Name="zarzadzanieUzytkownikamiBtn" Content="Zarządzanie użytkownikami" Margin="0,0,80,0" VerticalAlignment="Top" Click="button2_Click" HorizontalAlignment="Right" Width="164" Visibility="Hidden" IsEnabled="False"/>
+        <Button x:Name="szukajBtn" IsEnabled="False" Content="Wyszukaj" HorizontalAlignment="Left" Margin="163,34,0,0" VerticalAlignment="Top" Width="75" Click="button3_Click"/>
+        <Button x:Name="usunBtn" IsEnabled="False" Content="Usuń rekord" HorizontalAlignment="Left" Margin="163,0,0,10" Width="75" Click="button4_Click" Height="20" VerticalAlignment="Bottom"/>
+        <Button x:Name="zarzadzanieTabelamiBtn" Content="Zarządzanie tabelami" Margin="0,0,249,0" VerticalAlignment="Top" Click="button5_Click" HorizontalAlignment="Right" Width="130" Visibility="Hidden" IsEnabled="False"/>
         <Label x:Name="ktoZalogowany" Content="" Margin="273,20,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" />
     </Grid>
 </Window>

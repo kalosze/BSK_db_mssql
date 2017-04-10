@@ -37,6 +37,7 @@ namespace interfejs
             try
             {
                 String cmd;
+
             }
             catch
             {

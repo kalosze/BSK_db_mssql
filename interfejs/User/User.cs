@@ -8,22 +8,27 @@ namespace interfejs
 {
     public class User
     {
-        string login { get; set; }
-        string pass { get; set; }
+        private string login1;
+        private string pass1;
+
+        string login { get; }
+        string pass { get; }
         public string name { get; set; }
         public string surname { get; set; }
         int accesLvl { get; set;}
-        //moze zadziala statyczna tablica uzytkownikow
+        public string stanowisko { get; }        //moze zadziala statyczna tablica uzytkownikow
         //public static List<User> Users;
 
         //Konstruktor uzytkownika
-        public User(string login, string pass, string name, string surname, int accesLvl)
+        public User(string login, string pass, string name, string surname,string stanowisko, int accesLvl)
         {
             this.login = login;
             this.pass = pass;
             this.name = name;
             this.surname = surname;
+            this.stanowisko = stanowisko;
             this.accesLvl = accesLvl;
         }
+
     }
 }

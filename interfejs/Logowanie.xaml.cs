@@ -36,7 +36,7 @@ namespace interfejs
             //wycyckanie użytkownika z bazy danych
             //TO DO
             MainWindow mainWindow = Owner as MainWindow;
-            mainWindow.usr =  new CurrentUser(login, pass, "Chuj", "Kutas", 5);
+            mainWindow.usr =  new CurrentUser(login, pass, "Chuj", "Kutas","Administrator" ,5);
 
             //jeśli się udało
             if (mainWindow.usr != null)
