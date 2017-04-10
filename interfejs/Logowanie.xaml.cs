@@ -46,7 +46,7 @@ namespace interfejs
                 SqlDataReader reader;
                 reader = cmd.ExecuteReader();
                 reader.Read();
-                mainWindow.usr = new CurrentUser(reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetInt32(6));
+                mainWindow.usr = new CurrentUser(reader.GetInt32(0),reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetInt32(6));
                 reader.Close();
                 con.Close();
 

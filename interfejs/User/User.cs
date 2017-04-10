@@ -11,17 +11,19 @@ namespace interfejs
         private string login1;
         private string pass1;
 
-        string login { get; }
+        public int id { get; }
+        public string login { get; }
         string pass { get; }
         public string name { get; set; }
         public string surname { get; set; }
-        int etykieta { get; set;}
+        public int etykieta { get; set;}
         public string stanowisko { get; }        //moze zadziala statyczna tablica uzytkownikow
         //public static List<User> Users;
 
         //Konstruktor uzytkownika
-        public User(string login, string pass, string name, string surname,string stanowisko, int accesLvl)
+        public User(int id,string login, string pass, string name, string surname,string stanowisko, int accesLvl)
         {
+            this.id= id;
             this.login = login;
             this.pass = pass;
             this.name = name;

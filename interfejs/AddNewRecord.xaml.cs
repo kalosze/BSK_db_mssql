@@ -40,9 +40,11 @@ namespace interfejs
             int i = 0;
             var propertisy = typ.GetProperties();
             var numProp = propertisy.GetLength(0);
-            this.Height = numProp * top + 10 + add.Height + 20;
-            for (var j = 1; j < numProp; ++j)
+            var forHeight = numProp + (propertisy[0].Name == "ID" ? 0 : 1);
+            this.Height = forHeight * top + 10 + add.Height + 20;
+            for (var j = 0; j < numProp; ++j)
             {
+                if (propertisy[j].Name == "ID") continue;
                 var newGrid = new Grid()
                 {
                     HorizontalAlignment = HorizontalAlignment.Left,
@@ -74,9 +76,9 @@ namespace interfejs
                 ++i;
             }
             var addMargin = add.Margin;
-            add.Margin = new Thickness(addMargin.Left, top * numProp + 5 - add.Height, addMargin.Right, addMargin.Bottom);
+            add.Margin = new Thickness(addMargin.Left, top * forHeight + 5 - add.Height, addMargin.Right, addMargin.Bottom);
             var cancelMargin = cancel.Margin;
-            cancel.Margin = new Thickness(cancelMargin.Left, top * numProp + 5 - cancel.Height, cancelMargin.Right, cancelMargin.Bottom);
+            cancel.Margin = new Thickness(cancelMargin.Left, top * forHeight + 5 - cancel.Height, cancelMargin.Right, cancelMargin.Bottom);
         }
 
         private void add_Click(object sender, RoutedEventArgs e)
@@ -88,6 +90,7 @@ namespace interfejs
                 {
                     var tabela = Database.tabele[(int)Enum.Parse(typeof(TabeleEnum), table)].Item2;
                     var propertisy = typ.GetProperties();
+                    int noKey = propertisy[0].Name == "ID" ? 0 : 1;
                     for (var i = 0; i < propertisy.GetLength(0); ++i)
                     {
                         if (propertisy[i].Name == "ID")
@@ -95,7 +98,7 @@ namespace interfejs
                             propertisy[i].SetValue(record, (tabela.Count + 1).ToString());
                             continue;
                         }
-                        propertisy[i].SetValue(record, ((TextBox)((Grid)addRecord.Children[i + 1]).Children[1]).Text);
+                        propertisy[i].SetValue(record, ((TextBox)((Grid)addRecord.Children[i + 1 + noKey]).Children[1]).Text);
                     }
                     tabela.Add(record);
 

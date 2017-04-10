@@ -77,6 +77,7 @@ namespace interfejs
         private void button2_Click(object sender, RoutedEventArgs e)
         {
             var a = new AdminMenu(dbConnection);
+            a.Owner = this;
             a.Show();
         }
 
@@ -95,7 +96,7 @@ namespace interfejs
                     {
                         o.IsEnabled = true;
                     }
-                    if(usr.stanowisko == "Administrator")
+                    if(usr.etykieta == 0)
                     {
                         foreach (var o in kontrolkiAdmin)
                         {
@@ -122,7 +123,7 @@ namespace interfejs
                 {
                     o.IsEnabled = false;
                 }
-                if (usr.stanowisko == "Administrator")
+                if (usr.etykieta == 0)
                 {
                     foreach (var o in kontrolkiAdmin)
                     {
