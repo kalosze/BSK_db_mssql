@@ -53,7 +53,7 @@ namespace interfejs
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                //MessageBox.Show(ex.Message);
                 con.Close();
             }
             
