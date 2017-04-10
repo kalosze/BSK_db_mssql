@@ -8,7 +8,7 @@ namespace interfejs
 {
     public class CurrentUser : User
     {
-        public CurrentUser(string login, string pass, string name, string surname, string stanowisko, int accesLvl) : base(login, pass, name, surname, stanowisko, accesLvl)
+        public CurrentUser(string login, string pass, string name, string surname, string stanowisko, int etykieta) : base(login, pass, name, surname, stanowisko, etykieta)
         {
         }
 

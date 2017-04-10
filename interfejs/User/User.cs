@@ -15,7 +15,7 @@ namespace interfejs
         string pass { get; }
         public string name { get; set; }
         public string surname { get; set; }
-        int accesLvl { get; set;}
+        int etykieta { get; set;}
         public string stanowisko { get; }        //moze zadziala statyczna tablica uzytkownikow
         //public static List<User> Users;
 
@@ -27,7 +27,7 @@ namespace interfejs
             this.name = name;
             this.surname = surname;
             this.stanowisko = stanowisko;
-            this.accesLvl = accesLvl;
+            this.etykieta = accesLvl;
         }
 
     }

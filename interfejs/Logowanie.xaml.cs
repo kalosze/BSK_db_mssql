@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,22 +22,42 @@ namespace interfejs
     {
         string pass { get; set; }
         string login { get; set; }
+
+        SqlConnection con;
         //public CurrentUser usr { get; set; }
-        public Logowanie()
+        public Logowanie(SqlConnection dbConnection)
         {
+            con = dbConnection;
             InitializeComponent();
         }
-        
-           
-
         private void logInButton_Click(object sender, RoutedEventArgs e)
         {
             login = this.loginBox.Text;
             pass = this.passwordBox.Password;
+            MainWindow mainWindow = Owner as MainWindow;
             //wycyckanie użytkownika z bazy danych
             //TO DO
-            MainWindow mainWindow = Owner as MainWindow;
-            mainWindow.usr =  new CurrentUser(login, pass, "Chuj", "Kutas","Administrator" ,5);
+            try
+            {
+                String query = $"SELECT * FROM UZYTKOWNIK WHERE [LOGIN] like '{login}' AND [HASLO] like '{pass}'";
+                SqlCommand cmd = new SqlCommand(query, con);
+                con.Open();
+                cmd.ExecuteNonQuery();
+                SqlDataReader reader;
+                reader = cmd.ExecuteReader();
+                reader.Read();
+                mainWindow.usr = new CurrentUser(reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetInt32(6));
+                reader.Close();
+                con.Close();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                con.Close();
+            }
+            
+            
 
             //jeśli się udało
             if (mainWindow.usr != null)

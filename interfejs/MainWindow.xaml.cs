@@ -82,7 +82,7 @@ namespace interfejs
         {
             if (usr == null)
             {
-                var b = new Logowanie();
+                var b = new Logowanie(dbConnection);
                 b.Owner = this;
                 //b.usr = usr;
                 b.ShowDialog();
