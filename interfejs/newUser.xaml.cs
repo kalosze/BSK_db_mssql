@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Security.Cryptography;
 
 namespace interfejs
 {
@@ -38,9 +39,10 @@ namespace interfejs
             {
                 if (this.pass1.Password == this.pass2.Password)
                 {
+                    var pass = Encryptor.Encrypt(pass1.Password, this.login.Text);
                     String query = $"INSERT INTO UZYTKOWNIK (LOGIN, HASLO, IMIE, NAZWISKO, STANOWISKO, ETYKIETA) VALUES "+
                         $"('{this.login.Text}', "+
-                        $"'{this.pass1.Password}', "+
+                        $"'{pass}', "+
                         $"'{this.imie.Text}', "+
                         $"'{this.nazwisko.Text}', "+
                         $"'{this.listaStanowisk.Text}', "+

@@ -7,10 +7,10 @@
         mc:Ignorable="d"
         Title="Zarządzanie tabelami" Height="184.158" Width="324.505" ResizeMode="NoResize">
     <Grid>
-        <Button x:Name="button" Content="OK" HorizontalAlignment="Left" Margin="41,0,0,10" Width="74"  Height="27" VerticalAlignment="Bottom"/>
-        <Button x:Name="button1" Content="Anuluj" Margin="0,0,21,10" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75"/>
+        <Button x:Name="okBtn" Content="OK" HorizontalAlignment="Left" Margin="41,0,0,10" Width="74"  Height="27" VerticalAlignment="Bottom" Click="okBtn_Click"/>
+        <Button x:Name="anulujBtn" Content="Anuluj" Margin="0,0,21,10" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="anulujBtn_Click"/>
         <Grid HorizontalAlignment="Left" Height="51" Margin="10,13,0,0" VerticalAlignment="Top" Width="140">
-            <ComboBox x:Name="comboBox1" HorizontalAlignment="Left" Margin="0,29,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBox x:Name="wyborTabeli" HorizontalAlignment="Left" Margin="0,29,0,0" Width="120" SelectionChanged="wyborTabeli_SelectionChanged">
                 <TextBlock x:Name="textBlock2" TextWrapping="Wrap" Text="Tabela1"/>
             </ComboBox>
             <Label x:Name="label2" Content="Tabela:" HorizontalAlignment="Left" Margin="0,3,0,0" VerticalAlignment="Top"/>
@@ -20,7 +20,7 @@
                 <ColumnDefinition Width="52*"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Slider x:Name="slider1" Margin="13,48,0,5" Maximum="3" SmallChange="1" TickPlacement="TopLeft" IsSnapToTickEnabled="True" IsHitTestVisible="True" HorizontalAlignment="Left" Width="140"/>
+            <Slider x:Name="slider" Margin="13,48,0,5" Maximum="3" SmallChange="1" TickPlacement="TopLeft" IsSnapToTickEnabled="True" IsHitTestVisible="True" HorizontalAlignment="Left" Width="140" ValueChanged="slider_Change"/>
             <Label x:Name="label7" Content="Poziom dostępu:" Margin="15,0,31,57"/>
             <Label x:Name="label8" Content="3" Margin="140,26,0,31" HorizontalAlignment="Left" Width="16"/>
             <Label x:Name="label9" Content="2" Margin="97,26,0,31" HorizontalAlignment="Left" Width="16"/>

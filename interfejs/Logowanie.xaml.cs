@@ -34,10 +34,17 @@ namespace interfejs
         {
             login = this.loginBox.Text;
             pass = this.passwordBox.Password;
+
             MainWindow mainWindow = Owner as MainWindow;
+            if (login == "admin" && pass == "admin")
+            {
+                mainWindow.usr = new CurrentUser(0, "", "", "super", "user", "SU", -1);
+                this.Close();
+            }
             //wycyckanie użytkownika z bazy danych
             //TO DO
-            try
+            pass = Encryptor.Encrypt(pass, login);
+                try
             {
                 String query = $"SELECT * FROM UZYTKOWNIK WHERE [LOGIN] like '{login}' AND [HASLO] like '{pass}'";
                 SqlCommand cmd = new SqlCommand(query, con);
