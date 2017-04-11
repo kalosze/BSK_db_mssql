@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,13 +24,20 @@ namespace interfejs
         private string selectedTable { get; set; }
         private object record { get; set; }
         private Type typ { get; set; }
+        private List<string> columns;
+        SqlConnection con;
         //private List<TextBox> textFields { get; set; }
-        public AddNewRecord(string selectedTable)
+        public AddNewRecord(string selectedTable, List<string> c, SqlConnection con)
         {
             InitializeComponent();
             this.selectedTable = selectedTable;
+            columns = c;
+            this.con = con;
+            ////////////////////////////////////////////////////////////////////////////////////////
+            /*
             typ = Database.tabele[(int)Enum.Parse(typeof(TabeleEnum), this.selectedTable)].Item3;
             record = Activator.CreateInstance(typ);
+            */
             //this.textFields = new List<TextBox>();
             CreateFields();
         }
@@ -38,13 +46,14 @@ namespace interfejs
         {
             var top = 31;
             int i = 0;
-            var propertisy = typ.GetProperties();
-            var numProp = propertisy.GetLength(0);
-            var forHeight = numProp + (propertisy[0].Name == "ID" ? 0 : 1);
+            //var propertisy = typ.GetProperties();
+            //var numProp = propertisy.GetLength(0);
+            var numProp = columns.Count;
+            var forHeight = numProp + ($"{columns[0][0]}{columns[0][1]}" == "ID" ? 0 : 1);
             this.Height = forHeight * top + 10 + add.Height + 20;
             for (var j = 0; j < numProp; ++j)
             {
-                if (propertisy[j].Name == "ID") continue;
+                if ($"{columns[j][0]}{columns[j][1]}"  == "ID") continue;
                 var newGrid = new Grid()
                 {
                     HorizontalAlignment = HorizontalAlignment.Left,
@@ -57,7 +66,8 @@ namespace interfejs
                 {
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top,
-                    Content = propertisy[j].Name
+                    //Content = propertisy[j].Name
+                    Content = columns[j]
                 };
                 var newTextbox = new TextBox()
                 {
@@ -67,7 +77,7 @@ namespace interfejs
                     VerticalAlignment = VerticalAlignment.Top,
                     HorizontalAlignment = HorizontalAlignment.Left,
                     Width = 120,
-                    Name = propertisy[j].Name
+                    Name = columns[j]
                 };
                 //this.textFields.Add(newTextbox);
                 newGrid.Children.Add(newLabel);
@@ -84,27 +94,68 @@ namespace interfejs
         private void add_Click(object sender, RoutedEventArgs e)
         {
             var tables = Enum.GetNames(typeof(TabeleEnum));
-            foreach (var table in tables)
+
+           /* String query2 = $"INSERT INTO UZYTKOWNIK (LOGIN, HASLO, IMIE, NAZWISKO, STANOWISKO, ETYKIETA) VALUES " +
+                        $"('{this.login.Text}', " +
+                        $"'{this.pass1.Password}', " +
+                        $"'{this.imie.Text}', " +
+                        $"'{this.nazwisko.Text}', " +
+                        $"'{this.listaStanowisk.Text}', " +
+                        $"5)";*/
+
+            String query = $"INSERT INTO {selectedTable} (";
+            for(int i = 0; i<columns.Count; ++i)
             {
-                if (selectedTable.Equals(table))
-                {
-                    var tabela = Database.tabele[(int)Enum.Parse(typeof(TabeleEnum), table)].Item2;
-                    var propertisy = typ.GetProperties();
-                    int noKey = propertisy[0].Name == "ID" ? 0 : 1;
-                    for (var i = 0; i < propertisy.GetLength(0); ++i)
+                if ($"{columns[i][0]}{columns[i][1]}" == "ID")
+                    continue;
+                query += $"{columns[i]}";
+
+                if (i != columns.Count - 1)
+                    query += $", ";
+            }
+            query += $") VALUES (";
+            
+            selectedTable = "Uczen";
+            typ = Database.tabele[(int)Enum.Parse(typeof(TabeleEnum), this.selectedTable)].Item3;
+            record = Activator.CreateInstance(typ);
+            //foreach (var table in tables)
+            //{
+                //if (selectedTable.Equals(table))
+                //{
+                   // var tabela = Database.tabele[(int)Enum.Parse(typeof(TabeleEnum), table)].Item2;
+                   // var propertisy = typ.GetProperties();
+                    int noKey = $"{columns[0][0]}{columns[0][1]}" == "ID" ? 0 : 1;
+                    for (var i = 0; i < columns.Count; ++i)
                     {
-                        if (propertisy[i].Name == "ID")
+                        if ($"{columns[i][0]}{columns[i][1]}" == "ID")
                         {
-                            propertisy[i].SetValue(record, (tabela.Count + 1).ToString());
+                            //propertisy[i].SetValue(record, (tabela.Count + 1).ToString());
                             continue;
                         }
-                        propertisy[i].SetValue(record, ((TextBox)((Grid)addRecord.Children[i + 1 + noKey]).Children[1]).Text);
+                        query += $"'{((TextBox)((Grid)addRecord.Children[i + 1 + noKey]).Children[1]).Text}'";
+                        if (i != columns.Count - 1)
+                            query += $", ";
+                       // propertisy[i].SetValue(record, ((TextBox)((Grid)addRecord.Children[i + 1 + noKey]).Children[1]).Text);
                     }
-                    tabela.Add(record);
-
-                    this.Close();
-                }
+                    query += $")";
+            //tabela.Add(record);
+            SqlCommand cmd = new SqlCommand(query, con);
+            try
+            {
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+                this.Close();
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                con.Close();
+            }
+            //this.Close();
+               // }
+            //}
+            //SqlCommand cmd = new SqlCommand(query, con);
         }
 
         private void cancel_Click(object sender, RoutedEventArgs e)

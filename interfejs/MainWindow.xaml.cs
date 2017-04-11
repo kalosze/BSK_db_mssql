@@ -115,9 +115,10 @@ namespace interfejs
         //Dodawanie nowych rekordów
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            var b = new AddNewRecord(wybieranieTabeli.SelectedItem.ToString());
+            var a = wybieranieTabeli.SelectedItem.ToString();
+            var b = new AddNewRecord(wybieranieTabeli.SelectedItem.ToString(), tableColumns[wybieranieTabeli.SelectedItem.ToString()],dbConnection);
             b.ShowDialog();
-            dataGrid.Items.Refresh();
+            gridRefresh();
         }
 
         //guzik zarządzania użytkownikai
@@ -125,13 +126,114 @@ namespace interfejs
         {
             var a = new AdminMenu(dbConnection);
             a.Owner = this;
-            a.Show();
+            a.ShowDialog();
+            if (usr == null)
+                logowanie(true);
         }
 
         //Guzik logowania
         private void loginClick(object sender, RoutedEventArgs e)
         {
-            if (usr == null)
+            logowanie(false);
+            //this.Close();
+        }
+
+        //Guzik szukania rekordów
+        private void button3_Click(object sender, RoutedEventArgs e)
+        {
+            var b = new Search();
+            b.Owner = this;
+            b.ShowDialog();
+        }
+
+        //usuwanie rekordów
+        private void usunClick(object sender, RoutedEventArgs e)
+        {
+            DataRowView selected = (DataRowView)dataGrid.SelectedItem;
+            string tab = wybieranieTabeli.SelectedItem.ToString();
+            /*var tables = Enum.GetNames(typeof(TabeleEnum));
+            foreach (var table in tables)
+            {
+                if (wybieranieTabeli.SelectedItem.Equals(table))
+                {
+                    Database.tabele[(int)Enum.Parse(typeof(TabeleEnum), table)].Item2.Remove(selected);
+                    dataGrid.Items.Refresh();
+                    return;
+                }
+            }*/
+
+            try
+            {
+                String query = $"DELETE FROM {tab} WHERE {tableColumns[tab][0]} like '{selected.Row.ItemArray[0]}' AND {tableColumns[tab][1]} like '{selected.Row.ItemArray[1]}'";
+                SqlCommand cmd = new SqlCommand(query, dbConnection);
+                dbConnection.Open();
+                cmd.ExecuteNonQuery();
+                dbConnection.Close();
+                gridRefresh();
+                if(tab == "UZYTKOWNIK" && (int)selected.Row.ItemArray[0] == this.usr.id)
+                    logowanie(true);
+
+                /*users.Remove(selected);
+                var tmp = listaUzytkownikow.SelectedItem;
+                listaUzytkownikow.Items.Remove(tmp);
+
+                listaUzytkownikow.Text = "";
+
+                selected = null;
+                sliderEtykiet.IsEnabled = false;*/
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                dbConnection.Close();
+            }
+        }
+
+        //ustawienia tabel
+        private void button5_Click(object sender, RoutedEventArgs e)
+        {
+            var b = new tableControl();
+            b.Show();
+        }
+
+
+        //jak wybierzemy tabele z combo boxa
+        private void ComboBox_ChangeTable(object sender, SelectionChangedEventArgs e)
+        {
+            dodawanieRekorduBtn.IsEnabled = true;
+            usunBtn.IsEnabled = true;
+            if (e.AddedItems.Count == 0) return;
+            //var tables = Enum.GetNames(typeof(TabeleEnum));
+            gridRefresh();
+            /*foreach (var table in tables)
+            {
+                if (wybieranieTabeli.SelectedItem.Equals(table))
+                {
+                    dataGrid.Columns.Clear();
+                    dataGrid.ItemsSource = Database.tabele[(int)Enum.Parse(typeof(TabeleEnum), table)].Item2;
+
+                    return;
+                }
+            }*/
+        }
+
+        private void gridRefresh()
+        {
+            dataGrid.Columns.Clear();
+            dbConnection.Open();
+            String query = $"SELECT * FROM {wybieranieTabeli.SelectedItem.ToString()}";
+            //SqlCommand cmd = new SqlCommand(query, dbConnection);
+            var dataAdapter = new SqlDataAdapter(query, dbConnection);
+            DataTable ds = new DataTable();
+            dataAdapter.Fill(ds);
+            dataGrid.ItemsSource = ds.DefaultView;
+            dbConnection.Close();
+        }
+
+        private void logowanie(bool wylogowanie)
+        {
+            if (usr == null && !wylogowanie)
             {
                 var b = new Logowanie(dbConnection);
                 b.Owner = this;
@@ -171,14 +273,11 @@ namespace interfejs
                 {
                     o.IsEnabled = false;
                 }
-                if (usr.etykieta == 0)
-                {
                     foreach (var o in kontrolkiAdmin)
                     {
                         o.IsEnabled = false;
                         o.Visibility = Visibility.Hidden;
                     }
-                }
                 dataGrid.ItemsSource = null;
                 wybieranieTabeli.Items.Clear();
                 dodawanieRekorduBtn.IsEnabled = false;
@@ -186,58 +285,6 @@ namespace interfejs
                 usr = null;
                 this.loginButton.Content = "Zaloguj";
                 this.ktoZalogowany.Content = "";
-            }
-            //this.Close();
-        }
-
-        //Guzik szukania rekordów
-        private void button3_Click(object sender, RoutedEventArgs e)
-        {
-            var b = new Search();
-            b.Owner = this;
-            b.ShowDialog();
-        }
-
-        //usuwanie rekordów
-        private void usunClick(object sender, RoutedEventArgs e)
-        {
-            var selected = dataGrid.SelectedItem;
-            var tables = Enum.GetNames(typeof(TabeleEnum));
-            foreach (var table in tables)
-            {
-                if (wybieranieTabeli.SelectedItem.Equals(table))
-                {
-                    Database.tabele[(int)Enum.Parse(typeof(TabeleEnum), table)].Item2.Remove(selected);
-                    dataGrid.Items.Refresh();
-                    return;
-                }
-            }
-        }
-
-        //ustawienia tabel
-        private void button5_Click(object sender, RoutedEventArgs e)
-        {
-            var b = new tableControl();
-            b.Show();
-        }
-
-
-        //jak wybierzemy tabele z combo boxa
-        private void ComboBox_ChangeTable(object sender, SelectionChangedEventArgs e)
-        {
-            dodawanieRekorduBtn.IsEnabled = true;
-            usunBtn.IsEnabled = true;
-            if (e.AddedItems.Count == 0) return;
-            var tables = Enum.GetNames(typeof(TabeleEnum));
-            foreach (var table in tables)
-            {
-                if (wybieranieTabeli.SelectedItem.Equals(table))
-                {
-                    dataGrid.Columns.Clear();
-                    dataGrid.ItemsSource = Database.tabele[(int)Enum.Parse(typeof(TabeleEnum), table)].Item2;
-
-                    return;
-                }
             }
         }
     }

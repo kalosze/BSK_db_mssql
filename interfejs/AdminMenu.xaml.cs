@@ -98,6 +98,13 @@ namespace interfejs
 
                 listaUzytkownikow.Text = "";
 
+                MainWindow mainWindow = Owner as MainWindow;
+                if (selected.id == mainWindow.usr.id)
+                {
+                    mainWindow.usr = null;
+                    dbConnection.Close();
+                    this.Close();
+                }
                 selected = null;
                 sliderEtykiet.IsEnabled = false;
 
