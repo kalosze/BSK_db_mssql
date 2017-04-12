@@ -26,13 +26,15 @@ namespace interfejs
         List<string> columns;
         SqlConnection con;
         Dictionary<string, string> types;
-        public Search(SqlConnection dbConnection,string selectedName, List<string> nt, Dictionary<string, string> t)
+        Dictionary<string, bool> keys;
+        public Search(SqlConnection dbConnection,string selectedName, List<string> nt, Dictionary<string, string> t, Dictionary<string, bool> keys)
         {
             InitializeComponent();
             con = dbConnection;
             types = t;
             columns = nt;
             selectedTable = selectedName;
+            this.keys = keys;
             CreateFields();
         }
 
@@ -41,11 +43,11 @@ namespace interfejs
             var top = 31;
             int i = 0;
             var numProp = columns.Count;
-            var forHeight = numProp + ($"{columns[0][0]}{columns[0][1]}" == "ID" ? 0 : 1);
+            var forHeight = numProp + (keys[columns[0]] ? 0 : 1);
             this.Height = forHeight * top + 10 + szukajBtn.Height + 20;
             for (var j = 0; j < numProp; ++j)
             {
-                if ($"{columns[j][0]}{columns[j][1]}" == "ID") continue;
+                if (keys[columns[j]]) continue;
                 var newGrid = new Grid()
                 {
                     HorizontalAlignment = HorizontalAlignment.Left,
@@ -109,13 +111,13 @@ namespace interfejs
         {
             MainWindow mainWindow = Owner as MainWindow;
             mainWindow.dataGrid.Columns.Clear();
-            string a, lastAdded;
+            string a;
             String query = $"SELECT * FROM {selectedTable} WHERE ";
             bool first = true;
-            int noKey = $"{columns[0][0]}{columns[0][1]}" == "ID" ? 0 : 1;
+            int noKey = keys[columns[0]] ? 0 : 1;
             for (var i = 0; i < columns.Count; ++i)
             {
-                if ($"{columns[i][0]}{columns[i][1]}" == "ID")
+                if (keys[columns[i]])
                 {
                     //propertisy[i].SetValue(record, (tabela.Count + 1).ToString());
                     continue;
@@ -163,6 +165,25 @@ namespace interfejs
             {
                 MessageBox.Show(ex.Message);
                 con.Close();
+            }
+        }
+
+        private void anulujBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+                szukajBtn_Click(this, e);
+            }
+            else if (e.Key == Key.Escape)
+            {
+                e.Handled = true;
+                anulujBtn_Click(this, e);
             }
         }
     }

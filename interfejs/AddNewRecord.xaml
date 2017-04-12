@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:interfejs"
         mc:Ignorable="d"
-        Title="Dodawanie rekordu" Height="180.952" Width="267.46">
+        Title="Dodawanie rekordu" Height="180.952" Width="267.46"
+        Keyboard.KeyDown="Window_KeyDown">
     <Grid Name="addRecord" Margin="0,0,2,-3">
 
         <Button x:Name="add" Content="Dodaj" HorizontalAlignment="Left" Margin="10,116,0,0" Width="75" Height="23" VerticalAlignment="Top" Click="add_Click"/>

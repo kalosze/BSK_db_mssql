@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:interfejs"
         mc:Ignorable="d"
-        Title="Zarządzanie użytkownikami" Height="202.785" Width="324.762" ResizeMode="NoResize">
+        Title="Zarządzanie użytkownikami" Height="202.785" Width="324.762" ResizeMode="NoResize"
+        Keyboard.KeyDown="Window_KeyDown">
     <Grid>
         <ComboBox x:Name="listaUzytkownikow" HorizontalAlignment="Left" Margin="10,29,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="listaUzytkownikow_SelectionChanged">
         </ComboBox>

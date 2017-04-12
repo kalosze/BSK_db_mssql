@@ -62,5 +62,19 @@ namespace interfejs
             }
             this.Close();
         }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                e.Handled = true;
+                button_Click(this, e);
+            }
+            else if (e.Key == Key.Escape)
+            {
+                e.Handled = true;
+                button1_Click(this, e);
+            }
+        }
     }
 }

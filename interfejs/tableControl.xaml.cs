@@ -142,6 +142,20 @@ namespace interfejs
                 this.etykieta = e;
             }
         }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+                okBtn_Click(this, e);
+            }
+            else if (e.Key == Key.Escape)
+            {
+                e.Handled = true;
+                anulujBtn_Click(this, e);
+            }
+        }
     }
 
 

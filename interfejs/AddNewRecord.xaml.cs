@@ -28,14 +28,16 @@ namespace interfejs
         private List<string> columns;
         SqlConnection con;
         Dictionary<string, string> types;
+        Dictionary<string, bool> keys;
         //private List<TextBox> textFields { get; set; }
-        public AddNewRecord(string selectedTable, List<string> c, SqlConnection con, Dictionary<string, string> types)
+        public AddNewRecord(string selectedTable, List<string> c, SqlConnection con, Dictionary<string, string> types, Dictionary<string, bool> keys)
         {
             InitializeComponent();
             this.selectedTable = selectedTable;
             columns = c;
             this.types = types;
             this.con = con;
+            this.keys = keys;
             ////////////////////////////////////////////////////////////////////////////////////////
             /*
             typ = Database.tabele[(int)Enum.Parse(typeof(TabeleEnum), this.selectedTable)].Item3;
@@ -52,11 +54,11 @@ namespace interfejs
             //var propertisy = typ.GetProperties();
             //var numProp = propertisy.GetLength(0);
             var numProp = columns.Count;
-            var forHeight = numProp + ($"{columns[0][0]}{columns[0][1]}" == "ID" ? 0 : 1);
+            var forHeight = numProp + (keys[columns[i]] ? 0 : 1);
             this.Height = forHeight * top + 10 + add.Height + 20;
             for (var j = 0; j < numProp; ++j)
             {
-                if ($"{columns[j][0]}{columns[j][1]}" == "ID") continue;
+                if (keys[columns[j]]) continue;
                 var newGrid = new Grid()
                 {
                     HorizontalAlignment = HorizontalAlignment.Left,
@@ -135,7 +137,7 @@ namespace interfejs
             String query = $"INSERT INTO {selectedTable} (";
             for (int i = 0; i < columns.Count; ++i)
             {
-                if ($"{columns[i][0]}{columns[i][1]}" == "ID")
+                if (keys[columns[i]])
                     continue;
                 query += $"{columns[i]}";
 
@@ -153,10 +155,10 @@ namespace interfejs
             //{
             // var tabela = Database.tabele[(int)Enum.Parse(typeof(TabeleEnum), table)].Item2;
             // var propertisy = typ.GetProperties();
-            int noKey = $"{columns[0][0]}{columns[0][1]}" == "ID" ? 0 : 1;
+            int noKey = keys[columns[0]] ? 0 : 1;
             for (var i = 0; i < columns.Count; ++i)
             {
-                if ($"{columns[i][0]}{columns[i][1]}" == "ID")
+                if (keys[columns[i]])
                 {
                     //propertisy[i].SetValue(record, (tabela.Count + 1).ToString());
                     continue;
@@ -199,6 +201,20 @@ namespace interfejs
         private void cancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+                add_Click(this, e);
+            }
+            else if (e.Key == Key.Escape)
+            {
+                e.Handled = true;
+                cancel_Click(this, e);
+            }
         }
     }
 }

@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:interfejs"
         mc:Ignorable="d"
-        Title="Wyszukiwanie" Height="176.985" Width="311.905">
+        Title="Wyszukiwanie" Height="176.985" Width="311.905"
+        Keyboard.KeyDown="Window_KeyDown">
     <Grid Name="searchGrid" Margin="0,0,0,0">
         
         <Button x:Name="szukajBtn" Content="Szukaj" HorizontalAlignment="Left" Margin="10,0,0,10" Width="75" Height="23" VerticalAlignment="Bottom" Click="szukajBtn_Click"/>
-        <Button x:Name="anulujBtn" Content="Anuluj" HorizontalAlignment="Left" Margin="112,0,0,10" Width="75" Height="23" VerticalAlignment="Bottom"/>
+        <Button x:Name="anulujBtn" Content="Anuluj" HorizontalAlignment="Left" Margin="112,0,0,10" Width="75" Height="23" VerticalAlignment="Bottom" Click="anulujBtn_Click"/>
 
     </Grid>
 </Window>

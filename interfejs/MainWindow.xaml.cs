@@ -40,6 +40,7 @@ namespace interfejs
         Dictionary<string, List<DataRow>> tableColumnsMeta;
         Dictionary<string, Dictionary<string, string>> tableColumnsType;
         Dictionary<string, int> tableAccesLvl;
+        Dictionary<string, Dictionary<string, bool>> primaryKeys;
 
 
         public MainWindow()
@@ -59,7 +60,7 @@ namespace interfejs
             //kontrolkiBezWybierania.Add(this.wybieranieTabeli);
 
             kontrolkiEdycji.Add(this.dodawanieRekorduBtn);
-            kontrolkiEdycji.Add(this.usunBtn);
+            //kontrolkiEdycji.Add(this.usunBtn);
 
             //kontrolkiWyswietlania.Add(this.wybieranieTabeli);
             kontrolkiWyswietlania.Add(this.szukajBtn);
@@ -76,9 +77,10 @@ namespace interfejs
             tableColumnsMeta = new Dictionary<string, List<DataRow>>();
             tableColumnsType = new Dictionary<string, Dictionary<string, string>>();
             tableAccesLvl = new Dictionary<string, int>();
+            primaryKeys = new Dictionary<string, Dictionary<string, bool>>();
 
-            //dane do połączenia z bazą danych
-            dbServer = "server=MICHAL-PC;database=BSK;Trusted_Connection=true";
+               //dane do połączenia z bazą danych
+               dbServer = "server=MICHAL-PC;database=BSK;Trusted_Connection=true";
 
             try
             {
@@ -101,13 +103,17 @@ namespace interfejs
                     restrictions[2] = tablename;
                     //wysyłamy do bazy danych zapytanie o kolumny z tej tablicy (restrictions) 
                     var column = dbConnection.GetSchema("Columns", restrictions);
+                    //column = dbConnection.GetSchema(collectionName: "wtf");
+                    //var a = column.Columns[0].AutoIncrement;
                     //dodajemy do słownika po nazwach metadane o tablicach
                     tableNames.Add(tablename);
                     tables.Add(tablename, column);
                     List<string> lista = new List<string>();
                     List<DataRow> rowList = new List<DataRow>();
 
+                    
                     Dictionary<string, string> typy = new Dictionary<string, string>();
+                    Dictionary<string, bool> keys = new Dictionary<string, bool>();
                     foreach (DataRow c in column.Rows)
                     {
                         //c.ColumnName
@@ -115,11 +121,42 @@ namespace interfejs
                         lista.Add((string)c.ItemArray[3]);
                         rowList.Add(c);
                         typy.Add((string)c.ItemArray[3], (string)c.ItemArray[7]);
+
+                        ////////////////////////////////////////////////////////
+                        String query = $"SELECT K.TABLE_NAME, "
+                                    + $"K.COLUMN_NAME, "
+                                    + $"K.CONSTRAINT_NAME "
+                                    + $"FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS C "
+                                    + $"JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS K "
+                                    + $"ON C.TABLE_NAME = K.TABLE_NAME "
+                                    + $"AND C.CONSTRAINT_CATALOG = K.CONSTRAINT_CATALOG "
+                                    + $"AND C.CONSTRAINT_SCHEMA = K.CONSTRAINT_SCHEMA "
+                                    + $"AND C.CONSTRAINT_NAME = K.CONSTRAINT_NAME "
+                                    + $"WHERE C.CONSTRAINT_TYPE = 'PRIMARY KEY' "
+                                    + $"AND K.COLUMN_NAME = '{(string)c.ItemArray[3]}'";
+                        SqlCommand keyCmd = new SqlCommand(query, dbConnection);
+                        keyCmd.ExecuteNonQuery();
+
+                        SqlDataReader reader;
+                        reader = keyCmd.ExecuteReader();
+                        reader.Read();
+                        string nazwaTabeli = "";
+                        if (reader.HasRows)
+                            nazwaTabeli = reader.GetString(0);
+
+                        reader.Close();
+
+                        if(nazwaTabeli == tablename)
+                            keys.Add((string)c.ItemArray[3], true);
+                        else
+                            keys.Add((string)c.ItemArray[3], false);
+                        ////////////////////////////////////////////////////////
                     }
                     //dodajemy naszą listę
                     tableColumns.Add(tablename, lista);
                     tableColumnsMeta.Add(tablename, rowList);
                     tableColumnsType.Add(tablename, typy);
+                    primaryKeys.Add(tablename,keys);
                 }
 
                 foreach (var tab in tableNames)
@@ -133,6 +170,7 @@ namespace interfejs
             }
             catch (Exception ex)
             {
+
                 System.Windows.MessageBox.Show(ex.Message);
                 dbConnection.Close();
                 this.Close();
@@ -142,8 +180,14 @@ namespace interfejs
         //Dodawanie nowych rekordów
         private void button_Click(object sender, RoutedEventArgs e)
         {
+            string table = wybieranieTabeli.SelectedItem.ToString();
             var a = wybieranieTabeli.SelectedItem.ToString();
-            var b = new AddNewRecord(wybieranieTabeli.SelectedItem.ToString(), tableColumns[wybieranieTabeli.SelectedItem.ToString()], dbConnection, tableColumnsType[wybieranieTabeli.SelectedItem.ToString()]);
+            var b = new AddNewRecord(table,
+                tableColumns[table],
+                dbConnection,
+                tableColumnsType[table],
+                primaryKeys[table]
+                );
             b.ShowDialog();
             gridRefresh();
         }
@@ -169,7 +213,13 @@ namespace interfejs
         //Guzik szukania rekordów
         private void button3_Click(object sender, RoutedEventArgs e)
         {
-            var b = new Search(dbConnection, wybieranieTabeli.SelectedItem.ToString(), tableColumns[wybieranieTabeli.SelectedItem.ToString()], tableColumnsType[wybieranieTabeli.SelectedItem.ToString()]);
+            string table = wybieranieTabeli.SelectedItem.ToString();
+            var b = new Search(dbConnection,
+                table,
+                tableColumns[table],
+                tableColumnsType[table],
+                primaryKeys[table]
+                );
             b.Owner = this;
             b.ShowDialog();
         }
@@ -248,7 +298,7 @@ namespace interfejs
                 return;
             string jakaTabela = wybieranieTabeli.SelectedItem.ToString();
 
-
+            usunBtn.IsEnabled = false;
             //może wyświetlać
             if (tableAccesLvl[jakaTabela] <= usr.etykieta || usr.etykieta == -1)
             {
@@ -263,13 +313,18 @@ namespace interfejs
                 enableControls(kontrolkiWyswietlania, true);
             }
             else
+            {
                 enableControls(kontrolkiWyswietlania, false);
+            }
             //może edytować
             if (tableAccesLvl[jakaTabela] >= usr.etykieta || usr.etykieta == -1)
             {
                 enableControls(kontrolkiEdycji, true);
+                if (tableAccesLvl[jakaTabela] == usr.etykieta || usr.etykieta == -1)
+                    usunBtn.IsEnabled = true;
             }
             else
+
                 enableControls(kontrolkiEdycji, false);
 
         }

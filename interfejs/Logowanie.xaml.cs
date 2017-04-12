@@ -76,5 +76,29 @@ namespace interfejs
                 errorInfo.Visibility = Visibility.Visible;
             }
         }
+
+        private void loginBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            loginBox.SelectAll();
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+                logInButton_Click(this, e);
+            }
+            else if (e.Key == Key.Escape)
+            {
+                e.Handled = true;
+                this.Close();
+            }
+        }
+
+        private void passwordBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            passwordBox.SelectAll();
+        }
     }
 }

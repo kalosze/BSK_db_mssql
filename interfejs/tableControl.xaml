@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:interfejs"
         mc:Ignorable="d"
-        Title="Zarządzanie tabelami" Height="184.158" Width="324.505" ResizeMode="NoResize">
+        Title="Zarządzanie tabelami" Height="184.158" Width="324.505" ResizeMode="NoResize"
+        Keyboard.KeyDown="Window_KeyDown">
     <Grid>
         <Button x:Name="okBtn" Content="OK" HorizontalAlignment="Left" Margin="41,0,0,10" Width="74"  Height="27" VerticalAlignment="Bottom" Click="okBtn_Click"/>
         <Button x:Name="anulujBtn" Content="Anuluj" Margin="0,0,21,10" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="anulujBtn_Click"/>
