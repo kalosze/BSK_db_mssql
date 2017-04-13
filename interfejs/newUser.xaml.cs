@@ -35,6 +35,25 @@ namespace interfejs
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
+            int accesLvl = 4;
+            switch (this.listaStanowisk.Text)
+            {
+                case "Administrator":
+                    accesLvl = 0;
+            break;
+                case "Sekretarka":
+                    accesLvl = 1;
+                    break;
+                case "Nauczyciel":
+                    accesLvl = 2;
+                    break;
+                case "Dyrektor":
+                    accesLvl = 3;
+                    break;
+            default:
+                    accesLvl = 4;
+                    break;
+        }
             try
             {
                 if (this.pass1.Password == this.pass2.Password)
@@ -46,7 +65,7 @@ namespace interfejs
                         $"'{this.imie.Text}', "+
                         $"'{this.nazwisko.Text}', "+
                         $"'{this.listaStanowisk.Text}', "+
-                        $"5)";
+                        $"{accesLvl})";
                     SqlCommand cmd = new SqlCommand(query, dbConnection);
                     dbConnection.Open();
                     cmd.ExecuteNonQuery();

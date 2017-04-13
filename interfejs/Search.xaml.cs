@@ -112,6 +112,7 @@ namespace interfejs
             MainWindow mainWindow = Owner as MainWindow;
             mainWindow.dataGrid.Columns.Clear();
             string a;
+            int counter = 0;
             String query = $"SELECT * FROM {selectedTable} WHERE ";
             bool first = true;
             int noKey = keys[columns[0]] ? 0 : 1;
@@ -128,6 +129,7 @@ namespace interfejs
                         a = ((DatePicker)((Grid)searchGrid.Children[i + 1 + noKey]).Children[1]).Text;
                         if (a == "")
                             continue;
+                        counter++;
                         if (!first)
                         {
                             query += $" AND ";
@@ -136,10 +138,22 @@ namespace interfejs
                             first = false;
                         query += $"[{columns[i]}] like convert(date,'{a}',103)";
                         break;
+                    case "text":
+                        a = ((TextBox)((Grid)searchGrid.Children[i + 1 + noKey]).Children[1]).Text;
+                        if (a == "")
+                            continue;
+                        counter++;
+                        if (!first)
+                            query += $" AND ";
+                        else
+                            first = false;
+                        query += $"[{columns[i]}] like '%{a}%'";
+                        break;
                     default:
                         a = ((TextBox)((Grid)searchGrid.Children[i + 1 + noKey]).Children[1]).Text;
                         if (a == "")
                             continue;
+                        counter++;
                         if (!first)
                             query += $" AND ";
                         else
@@ -150,6 +164,10 @@ namespace interfejs
                 // propertisy[i].SetValue(record, ((TextBox)((Grid)addRecord.Children[i + 1 + noKey]).Children[1]).Text);
             }
             //tabela.Add(record);
+            if (counter == 0)
+            {
+                query = $"SELECT * FROM {selectedTable}";
+            }
             SqlCommand cmd = new SqlCommand(query, con);
             try
             {

@@ -63,7 +63,17 @@
       <DependentUpon>AddNewRecord.xaml</DependentUpon>
     </Compile>
     <Compile Include="Database.cs" />
+    <Compile Include="DelayedTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Encryptor.cs" />
+    <Compile Include="Others\Ocena.cs" />
+    <Compile Include="Others\Prowadzi.cs" />
+    <Compile Include="PassReset.xaml.cs">
+      <DependentUpon>PassReset.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Others\Przedmiot.cs" />
+    <Compile Include="Others\Uczen.cs" />
     <Compile Include="User\CurrentUser.cs" />
     <Compile Include="tableControl.xaml.cs">
       <DependentUpon>tableControl.xaml</DependentUpon>
@@ -73,6 +83,10 @@
     </Compile>
     <Compile Include="User\User.cs" />
     <Page Include="AddNewRecord.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PassReset.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

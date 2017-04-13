@@ -13,8 +13,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data.SqlClient;
-using static interfejs.Database;
+//using static interfejs.Database;
 using System.Data;
+using interfejs.Others;
+using System.Globalization;
+using System.Windows.Markup;
 
 namespace interfejs
 {
@@ -28,6 +31,8 @@ namespace interfejs
 
         //Nasza baza danych
         String dbServer;
+
+        //śmieci trzeba będzie przeczyścić
         SqlConnection dbConnection;
         List<Control> kontrolki;
         List<Control> kontrolkiEdycji;
@@ -39,13 +44,29 @@ namespace interfejs
         Dictionary<string, List<string>> tableColumns;
         Dictionary<string, List<DataRow>> tableColumnsMeta;
         Dictionary<string, Dictionary<string, string>> tableColumnsType;
-        Dictionary<string, int> tableAccesLvl;
+        public Dictionary<string, int> tableAccesLvl { get; set; }
         Dictionary<string, Dictionary<string, bool>> primaryKeys;
 
+        List<Uczen> uczniowie;
+        List<Ocena> oceny;
+        List<Przedmiot> przedmioty;
+        List<Prowadzi> prowadzi;
+        List<User> nauczyciele;
+       
+        Dictionary<string, List<Object>> listaKluczyObcych;
 
         public MainWindow()
         {
             InitializeComponent();
+
+
+            //Ustawiamy język na język systemu
+            /*
+            FrameworkElement.LanguageProperty.OverrideMetadata(
+                typeof(FrameworkElement),new FrameworkPropertyMetadata(
+                    XmlLanguage.GetLanguage(
+                        CultureInfo.CurrentCulture.IetfLanguageTag)));
+                        */
 
             //tutaj do listy dodajem kontrolki (po to by łatwiej je było włączać i wyłączać przy zalogowaniu/wylogowaniu)
             kontrolki = new List<Control>();
@@ -79,8 +100,14 @@ namespace interfejs
             tableAccesLvl = new Dictionary<string, int>();
             primaryKeys = new Dictionary<string, Dictionary<string, bool>>();
 
-               //dane do połączenia z bazą danych
-               dbServer = "server=MICHAL-PC;database=BSK;Trusted_Connection=true";
+           // uczniowie = new List<Uczen>();
+
+
+            //dane do połączenia z bazą danych//////////////////////////////////////////////////////////////////////////
+
+            dbServer = "server=MICHAL-PC;database=BSK;Trusted_Connection=true";
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             try
             {
@@ -91,7 +118,7 @@ namespace interfejs
 
                 //pobieramy metadane tabel z bazy danych
                 tablesFromDataBase = dbConnection.GetSchema("Tables");
-
+                SqlDataReader reader;
                 //Wyciągamy tablice i nazwy kolumn w tablicach z bazy danych
                 foreach (DataRow row in tablesFromDataBase.Rows)
                 {
@@ -103,8 +130,6 @@ namespace interfejs
                     restrictions[2] = tablename;
                     //wysyłamy do bazy danych zapytanie o kolumny z tej tablicy (restrictions) 
                     var column = dbConnection.GetSchema("Columns", restrictions);
-                    //column = dbConnection.GetSchema(collectionName: "wtf");
-                    //var a = column.Columns[0].AutoIncrement;
                     //dodajemy do słownika po nazwach metadane o tablicach
                     tableNames.Add(tablename);
                     tables.Add(tablename, column);
@@ -116,13 +141,12 @@ namespace interfejs
                     Dictionary<string, bool> keys = new Dictionary<string, bool>();
                     foreach (DataRow c in column.Rows)
                     {
-                        //c.ColumnName
                         //przechodzimy po uzyskanych wynikach (meta danych kolumn z bazy danych) i wyciągamy nazwę z tego (która znajduje się na 3 pozycji [3]  - [7] to typ zmiennej
                         lista.Add((string)c.ItemArray[3]);
                         rowList.Add(c);
                         typy.Add((string)c.ItemArray[3], (string)c.ItemArray[7]);
 
-                        ////////////////////////////////////////////////////////
+                        //////////////////////////////////////////////////////// tutaj sprawdzamy czy kolumna jest kluczem głównym tabeli
                         String query = $"SELECT K.TABLE_NAME, "
                                     + $"K.COLUMN_NAME, "
                                     + $"K.CONSTRAINT_NAME "
@@ -137,7 +161,7 @@ namespace interfejs
                         SqlCommand keyCmd = new SqlCommand(query, dbConnection);
                         keyCmd.ExecuteNonQuery();
 
-                        SqlDataReader reader;
+                        
                         reader = keyCmd.ExecuteReader();
                         reader.Read();
                         string nazwaTabeli = "";
@@ -166,6 +190,69 @@ namespace interfejs
                 }
                 //po tych operacjach w słowniku tables mamy metadane o tablicach połączone z ich nazwami
                 //a w tableColumns mamy nazwy kolumn w poszczególnych tablicach (gdzie key to nazwa tablicy a value to lista z nazwami kolumn)
+
+                SqlCommand cmd;
+
+                cmd = new SqlCommand("SELECT * FROM UCZEN",dbConnection);
+                cmd.ExecuteNonQuery();
+                reader = cmd.ExecuteReader();
+                uczniowie = new List<Uczen>();
+                while (reader.Read())
+                {
+                    uczniowie.Add(new Uczen(reader.GetInt32(0),reader.GetString(1),reader.GetString(2),reader.GetDateTime(3),reader.GetString(4),reader.GetInt32(5)));
+                }
+                reader.Close();
+
+                cmd = new SqlCommand("SELECT * FROM OCENA", dbConnection);
+                cmd.ExecuteNonQuery();
+                reader = cmd.ExecuteReader();
+                oceny = new List<Ocena>();
+                while (reader.Read())
+                {
+                    oceny.Add(new Ocena(reader.GetInt32(0),reader.GetFloat(1), reader.GetDateTime(2), 
+                        new Dictionary<string, int> {
+                            { "ID_UCZNIA", reader.GetInt32(3) },
+                            { "ID_UZYTKOWNIKA", reader.GetInt32(4) },
+                            { "ID_PRZEDMIOTU", reader.GetInt32(5) }
+                        }                
+                    ));
+                }
+                reader.Close();
+
+                cmd = new SqlCommand("SELECT * FROM UZYTKOWNIK WHERE [STANOWISKO] like 'Nauczyciel'", dbConnection);
+                cmd.ExecuteNonQuery();
+                reader = cmd.ExecuteReader();
+                nauczyciele = new List<User>();
+                while (reader.Read())
+                {
+                    nauczyciele.Add(new User(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetInt32(6)));
+                }
+                reader.Close();
+
+                cmd = new SqlCommand("SELECT * FROM PRZEDMIOT", dbConnection);
+                cmd.ExecuteNonQuery();
+                reader = cmd.ExecuteReader();
+                przedmioty = new List<Przedmiot>();
+                while (reader.Read())
+                {
+                    przedmioty.Add(new Przedmiot(reader.GetInt32(0), reader.GetString(1)));
+                }
+                reader.Close();
+
+                cmd = new SqlCommand("SELECT * FROM PROWADZI", dbConnection);
+                cmd.ExecuteNonQuery();
+                reader = cmd.ExecuteReader();
+                prowadzi = new List<Prowadzi>();
+                while(reader.Read())
+                {
+                    prowadzi.Add(new Prowadzi(
+                        new Dictionary<string, int>() {
+                            {"ID_PRZEDMIOTU",reader.GetInt32(0)},
+                            {"ID_UZYTKOWNIKA", reader.GetInt32(1)}
+                        }
+                    ));
+                }
+
                 dbConnection.Close();
             }
             catch (Exception ex)
@@ -192,7 +279,7 @@ namespace interfejs
             gridRefresh();
         }
 
-        //guzik zarządzania użytkownikai
+        //guzik zarządzania użytkownikami
         private void button2_Click(object sender, RoutedEventArgs e)
         {
             var a = new AdminMenu(dbConnection);
@@ -229,17 +316,6 @@ namespace interfejs
         {
             DataRowView selected = (DataRowView)dataGrid.SelectedItem;
             string tab = wybieranieTabeli.SelectedItem.ToString();
-            /*var tables = Enum.GetNames(typeof(TabeleEnum));
-            foreach (var table in tables)
-            {
-                if (wybieranieTabeli.SelectedItem.Equals(table))
-                {
-                    Database.tabele[(int)Enum.Parse(typeof(TabeleEnum), table)].Item2.Remove(selected);
-                    dataGrid.Items.Refresh();
-                    return;
-                }
-            }*/
-
             try
             {
                 String query = $"DELETE FROM {tab} WHERE {tableColumns[tab][0]} like '{selected.Row.ItemArray[0]}' AND {tableColumns[tab][1]} like '{selected.Row.ItemArray[1]}'";
@@ -250,16 +326,6 @@ namespace interfejs
                 gridRefresh();
                 if (tab == "UZYTKOWNIK" && (int)selected.Row.ItemArray[0] == this.usr.id)
                     logowanie(true);
-
-                /*users.Remove(selected);
-                var tmp = listaUzytkownikow.SelectedItem;
-                listaUzytkownikow.Items.Remove(tmp);
-
-                listaUzytkownikow.Text = "";
-
-                selected = null;
-                sliderEtykiet.IsEnabled = false;*/
-
             }
             catch (Exception ex)
             {
@@ -272,6 +338,7 @@ namespace interfejs
         private void button5_Click(object sender, RoutedEventArgs e)
         {
             var b = new tableControl(tableNames, dbConnection);
+            b.Owner = this;
             b.ShowDialog();
             gridRefresh();
         }
@@ -280,9 +347,6 @@ namespace interfejs
         //jak wybierzemy tabele z combo boxa
         private void ComboBox_ChangeTable(object sender, SelectionChangedEventArgs e)
         {
-            /*dodawanieRekorduBtn.IsEnabled = true;
-            usunBtn.IsEnabled = true;
-            szukajBtn.IsEnabled = true;*/
             if (e.AddedItems.Count == 0) return;
             gridRefresh();
 
@@ -303,14 +367,22 @@ namespace interfejs
             if (tableAccesLvl[jakaTabela] <= usr.etykieta || usr.etykieta == -1)
             {
                 String query = $"SELECT * FROM {jakaTabela}";
-                dbConnection.Open();
-                //SqlCommand cmd = new SqlCommand(query, dbConnection);
-                var dataAdapter = new SqlDataAdapter(query, dbConnection);
-                DataTable ds = new DataTable();
-                dataAdapter.Fill(ds);
-                dataGrid.ItemsSource = ds.DefaultView;
-                dbConnection.Close();
-                enableControls(kontrolkiWyswietlania, true);
+                try
+                {
+                    dbConnection.Open();
+                    //SqlCommand cmd = new SqlCommand(query, dbConnection);
+                    var dataAdapter = new SqlDataAdapter(query, dbConnection);
+                    DataTable ds = new DataTable();
+                    dataAdapter.Fill(ds);
+                    dataGrid.ItemsSource = ds.DefaultView;
+                    //dataGrid.IsReadOnly = true;
+                    dbConnection.Close();
+                    enableControls(kontrolkiWyswietlania, true);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
             else
             {
@@ -329,6 +401,7 @@ namespace interfejs
 
         }
 
+        //metoda logowania
         private void logowanie(bool wylogowanie)
         {
             if (usr == null && !wylogowanie)
@@ -350,12 +423,6 @@ namespace interfejs
                     }
                     this.loginButton.Content = "Wyloguj";
                     this.ktoZalogowany.Content = $"Witaj: {usr.name} {usr.surname}";
-                    /*dodawanieRekorduBtn.IsEnabled = false;
-                    usunBtn.IsEnabled = false;
-                    szukajBtn.IsEnabled = false;*/
-
-                    /* dropdown lista tabel z fejkowej bazy danych */
-                    //var tables = Enum.GetNames(typeof(TabeleEnum));
                     foreach (string tableName in tables.Keys)
                     {
                         wybieranieTabeli.Items.Add(tableName);
@@ -373,20 +440,19 @@ namespace interfejs
                 }
                 dataGrid.ItemsSource = null;
                 wybieranieTabeli.Items.Clear();
-                /*dodawanieRekorduBtn.IsEnabled = false;
-                usunBtn.IsEnabled = false;
-                szukajBtn.IsEnabled = false;*/
                 usr = null;
                 this.loginButton.Content = "Zaloguj";
                 this.ktoZalogowany.Content = "";
             }
         }
 
+
+        //funkcja do uzyskania etykiety tabeli
         private int getTableLvl(string name)
         {
             //var tables = Enum.GetNames(typeof(TabeleEnum));
-            string jakaTabela = name;
-            String query = $"SELECT [ETYKIETA] FROM [ETYKIETY] WHERE [NAZWA_TABELI] like '{jakaTabela}'";
+            //string jakaTabela = name;
+            String query = $"SELECT [ETYKIETA] FROM [ETYKIETY] WHERE [NAZWA_TABELI] like '{name}'";
             int etykieta = -1;
 
             SqlCommand cmd = new SqlCommand(query, dbConnection);
@@ -409,10 +475,25 @@ namespace interfejs
             return etykieta;
         }
 
+
+        //metoda włączająca lub wyłączające kontrolki z listy
         private void enableControls(List<Control> kontrolki, bool enable)
         {
             foreach (var k in kontrolki)
                 k.IsEnabled = enable;
+        }
+
+        private void RowDeleteCommand(Object sender, RoutedEventArgs e)
+        {
+            usunClick(sender, e);
+        }
+
+        private void dataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.PropertyType == typeof(System.DateTime))
+            {
+                (e.Column as DataGridTextColumn).Binding.StringFormat = "dd-MMMM-yyyy";
+            }
         }
     }
 

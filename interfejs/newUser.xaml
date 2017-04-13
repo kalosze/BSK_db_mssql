@@ -26,6 +26,7 @@
             <Label x:Name="label6" Content="Stanowisko:" HorizontalAlignment="Left" Margin="0,169,0,0" VerticalAlignment="Top"/>
             <ComboBox x:Name="listaStanowisk" HorizontalAlignment="Left" Margin="111,174,0,0" VerticalAlignment="Top" Width="161">
                 <ComboBoxItem Content="Nauczyciel"/>
+                <ComboBoxItem Content="Sekretarka"/>
                 <ComboBoxItem Content="Dyrektor"/>
                 <ComboBoxItem Content="Administrator"/>
             </ComboBox>

@@ -39,6 +39,7 @@ namespace interfejs
                 con.Open();
                 SqlCommand cmd;
                 String query;
+                MainWindow mainWindow = Owner as MainWindow;
                 foreach (var et in etykiety)
                 {
                     query = $"UPDATE ETYKIETY SET ETYKIETA='{et.etykieta}' WHERE [ID_ETYKIETY] like '{et.id}'";
@@ -46,7 +47,9 @@ namespace interfejs
 
                     cmd.ExecuteNonQuery();
 
+                    mainWindow.tableAccesLvl[et.nazwaTabeli] = et.etykieta;
                 }
+               
                 con.Close();
             }
             catch (Exception ex)

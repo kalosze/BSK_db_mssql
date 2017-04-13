@@ -1,0 +1,19 @@
+﻿<Window x:Class="interfejs.PassReset"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:interfejs"
+        mc:Ignorable="d"
+        Title="PassReset" Height="172.674" Width="300">
+    <Grid>
+        <Button x:Name="resetButton" Content="Resetuj" HorizontalAlignment="Left" Margin="10,0,0,10" Width="101" Height="29" VerticalAlignment="Bottom" Click="resetButton_Click"/>
+        <Button x:Name="cancelButton" Content="Anuluj" Margin="0,0,10,10" HorizontalAlignment="Right" Width="100" Height="29" VerticalAlignment="Bottom" Click="cancelButton_Click"/>
+        <Label x:Name="label" Content="Nowe hasło: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="96"/>
+        <Label x:Name="label1" Content="Potwierdz hasło:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+        <PasswordBox x:Name="passBox" Margin="111,10,10,0" VerticalAlignment="Top" Height="26" Keyboard.GotKeyboardFocus="passBox_GotKeyboardFocus" Mouse.GotMouseCapture="passBox_GotMouseCapture"/>
+        <PasswordBox x:Name="passBox2" Margin="111,41,10,0" VerticalAlignment="Top" Height="26" Keyboard.GotKeyboardFocus="passBox2_GotKeyboardFocus"  Mouse.GotMouseCapture="passBox2_GotMouseCapture"/>
+        <Label x:Name="info" Content="Hasła się nie zgadzają!" Foreground="Red" Margin="10,72,5,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Visibility="Hidden"/>
+
+    </Grid>
+</Window>

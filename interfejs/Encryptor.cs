@@ -10,13 +10,14 @@ namespace interfejs
 {
     class Encryptor
     {
-        static readonly string PasswordHash = "P@@Sw0rd";
-        //static readonly string SaltKey = "S@LT&KEY";
+        static readonly string PasswordHash = "hjAfnSSNe-1+P@#uyJA8(dl.s!xcf !giEo_sd/*?aVg1";
+        static readonly string plusSalt = "s@@LtK3YYY123%%@";
         static readonly string VIKey = "@1B2c3D4e5F6g7H8";
-        public static string Encrypt(string plainText, string SaltKey)
+        public static string Encrypt(string textToEncrypt, string SaltKey)
         {
-            byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
-            SaltKey += "s@@LtK3YYY123%%@";
+            byte[] plainTextBytes = Encoding.UTF8.GetBytes(textToEncrypt);
+            var random = RandomNumberGenerator.Create();
+            SaltKey += plusSalt;
             byte[] keyBytes = new Rfc2898DeriveBytes(PasswordHash, Encoding.ASCII.GetBytes(SaltKey)).GetBytes(256 / 8);
             var symmetricKey = new RijndaelManaged() { Mode = CipherMode.CBC, Padding = PaddingMode.Zeros };
             var encryptor = symmetricKey.CreateEncryptor(keyBytes, Encoding.ASCII.GetBytes(VIKey));
@@ -37,10 +38,10 @@ namespace interfejs
             return Convert.ToBase64String(cipherTextBytes);
         }
 
-        public static string Decrypt(string encryptedText,string SaltKey)
+        public static string Decrypt(string textToDecrypt,string SaltKey)
         {
-            SaltKey += "s@@LtK3YYY123%%@";
-            byte[] cipherTextBytes = Convert.FromBase64String(encryptedText);
+            SaltKey += plusSalt;
+            byte[] cipherTextBytes = Convert.FromBase64String(textToDecrypt);
             byte[] keyBytes = new Rfc2898DeriveBytes(PasswordHash, Encoding.ASCII.GetBytes(SaltKey)).GetBytes(256 / 8);
             var symmetricKey = new RijndaelManaged() { Mode = CipherMode.CBC, Padding = PaddingMode.None };
 
@@ -54,6 +55,7 @@ namespace interfejs
             cryptoStream.Close();
             return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount).TrimEnd("\0".ToCharArray());
         }
+
     }
 
 }

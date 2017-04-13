@@ -13,7 +13,7 @@ namespace interfejs
 
         public int id { get; }
         public string login { get; }
-        string pass { get; }
+        public string pass { get; set; }
         public string name { get; set; }
         public string surname { get; set; }
         public int etykieta { get; set;}

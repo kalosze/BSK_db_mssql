@@ -21,9 +21,9 @@ namespace interfejs
     public partial class AdminMenu : Window
     {
         List<User> users;
-        SqlConnection dbConnection;
+        public SqlConnection dbConnection { get; }
         User selected;
-        public AdminMenu(SqlConnection con) : base()
+        public AdminMenu(SqlConnection con)
         {
             InitializeComponent();
             sliderEtykiet.IsEnabled = false;
@@ -66,10 +66,16 @@ namespace interfejs
 
         private void listaUzytkownikow_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (((Owner as MainWindow).usr.etykieta < 0) && showPass.Visibility == Visibility.Hidden)
+                showPass.Visibility = Visibility.Visible;
+
             foreach (var u in users)
             {
                 if (listaUzytkownikow.SelectedItem != null && u.login == this.listaUzytkownikow.SelectedItem.ToString())
                 {
+                    usunBtn.IsEnabled = true;
+                    passReset.IsEnabled = true;
+                    showPass.IsEnabled = true;
                     selected = u;
                     sliderEtykiet.IsEnabled = true;
                     sliderEtykiet.Value = selected.etykieta;
@@ -183,6 +189,22 @@ namespace interfejs
                 anulujBtn_Click(this, e);
             }
 
+        }
+
+        private void passReset_Click(object sender, RoutedEventArgs e)
+        {
+            var name = listaUzytkownikow.SelectedItem;
+            if (name != null)
+            {
+                var resetWindow = new PassReset(selected,dbConnection);
+                resetWindow.Owner = this;
+                resetWindow.ShowDialog();
+            }
+        }
+
+        private void showPass_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(Encryptor.Decrypt(selected.pass, selected.login));
         }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:interfejs"
         mc:Ignorable="d"
-        Title="Zarządzanie użytkownikami" Height="202.785" Width="324.762" ResizeMode="NoResize"
+        Title="Zarządzanie użytkownikami" Height="238.154" Width="324.762" ResizeMode="NoResize"
         Keyboard.KeyDown="Window_KeyDown">
     <Grid>
         <ComboBox x:Name="listaUzytkownikow" HorizontalAlignment="Left" Margin="10,29,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="listaUzytkownikow_SelectionChanged">
@@ -13,9 +13,9 @@
         <Label x:Name="label" Content="Użytkownik:" HorizontalAlignment="Left" Margin="10,3,0,0" VerticalAlignment="Top"/>
         <Button x:Name="okBtn" Content="OK" HorizontalAlignment="Left" Margin="31,0,0,19" Width="74"  Height="27" VerticalAlignment="Bottom" Click="okBtn_Click"/>
         <Button x:Name="anulujBtn" Content="Anuluj" Margin="0,0,31,19" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="anulujBtn_Click"/>
-        <Button x:Name="usunBtn" Content="Usuń użytkownika" HorizontalAlignment="Left" Margin="10,83,0,0" VerticalAlignment="Top" Width="106" Height="22" Click="usunBtn_Click"/>
+        <Button x:Name="usunBtn" IsEnabled="False" Content="Usuń użytkownika" HorizontalAlignment="Left" Margin="10,83,0,0" VerticalAlignment="Top" Width="106" Height="22" Click="usunBtn_Click"/>
         <Button x:Name="dodajUsrBtn" Content="Dodaj użytkownika" HorizontalAlignment="Left" Margin="10,56,0,0" VerticalAlignment="Top" Width="106" Height="22" Click="addNewUserClick"/>
-        <Grid Height="83" Margin="135,10,9,0" VerticalAlignment="Top">
+        <Grid Height="83" Margin="135,49,9,0" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="52*"/>
                 <ColumnDefinition/>
@@ -27,6 +27,8 @@
             <Label x:Name="label5" Content="1" Margin="53,26,0,31" HorizontalAlignment="Left" Width="16"/>
             <Label x:Name="label6" Content="0" Margin="10,26,0,31" RenderTransformOrigin="0.554,0.356" HorizontalAlignment="Left" Width="16"/>
         </Grid>
+        <Button x:Name="passReset" IsEnabled="False" Content="Resetuj hasło" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" Width="106" Height="22" Click="passReset_Click"/>
+        <Button x:Name="showPass" Visibility="Hidden" Content="Pokaż hasło" IsEnabled="False" HorizontalAlignment="Left" Margin="135,29,0,0" VerticalAlignment="Top" Width="75" Click="showPass_Click"/>
 
     </Grid>
 </Window>
