@@ -14,22 +14,22 @@
             <TextBox x:Name="imie" HorizontalAlignment="Left" Height="23" Margin="111,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161"/>
             <TextBox x:Name="nazwisko" HorizontalAlignment="Left" Height="23" Margin="111,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161"/>
             <TextBox x:Name="login" HorizontalAlignment="Left" Height="23" Margin="111,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161"/>
-            <TextBox x:Name="email" HorizontalAlignment="Left" Height="23" Margin="111,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161"/>
-            <PasswordBox x:Name="pass1" HorizontalAlignment="Left" Margin="111,114,0,0" VerticalAlignment="Top" Width="161" Height="23"/>
-            <PasswordBox x:Name="pass2" HorizontalAlignment="Left" Margin="111,142,0,0" VerticalAlignment="Top" Width="161" Height="23"/>
-            <Label x:Name="label" Content="Imię:" HorizontalAlignment="Left" Margin="0,-4,0,0" VerticalAlignment="Top"/>
-            <Label x:Name="label1" Content="Nazwisko:" HorizontalAlignment="Left" Margin="0,25,0,0" VerticalAlignment="Top"/>
-            <Label x:Name="label2" Content="Login:" HorizontalAlignment="Left" Margin="0,51,0,0" VerticalAlignment="Top"/>
-            <Label x:Name="label3" Content="e-mail:" HorizontalAlignment="Left" Margin="0,80,0,0" VerticalAlignment="Top"/>
-            <Label x:Name="label4" Content="Hasło:" HorizontalAlignment="Left" Margin="0,111,0,0" VerticalAlignment="Top"/>
-            <Label x:Name="label5" Content="Potwierdź hasło:" HorizontalAlignment="Left" Margin="0,139,0,0" VerticalAlignment="Top"/>
-            <Label x:Name="label6" Content="Stanowisko:" HorizontalAlignment="Left" Margin="0,169,0,0" VerticalAlignment="Top"/>
-            <ComboBox x:Name="listaStanowisk" HorizontalAlignment="Left" Margin="111,174,0,0" VerticalAlignment="Top" Width="161">
+            <ComboBox x:Name="listaStanowisk" HorizontalAlignment="Left" Margin="111,84,0,0" VerticalAlignment="Top" Width="161">
                 <ComboBoxItem Content="Nauczyciel"/>
                 <ComboBoxItem Content="Sekretarka"/>
                 <ComboBoxItem Content="Dyrektor"/>
                 <ComboBoxItem Content="Administrator"/>
             </ComboBox>
+            <PasswordBox x:Name="pass1" HorizontalAlignment="Left" Margin="111,114,0,0" VerticalAlignment="Top" Width="161" Height="23"/>
+            <PasswordBox x:Name="pass2" HorizontalAlignment="Left" Margin="111,142,0,0" VerticalAlignment="Top" Width="161" Height="23"/>
+            <Label x:Name="label" Content="Imię:" HorizontalAlignment="Left" Margin="0,-4,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="label1" Content="Nazwisko:" HorizontalAlignment="Left" Margin="0,25,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="label2" Content="Login:" HorizontalAlignment="Left" Margin="0,51,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="label4" Content="Hasło:" HorizontalAlignment="Left" Margin="0,111,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="label5" Content="Potwierdź hasło:" HorizontalAlignment="Left" Margin="0,139,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="label6" Content="Stanowisko:" HorizontalAlignment="Left" Margin="0,82,0,0" VerticalAlignment="Top"/>
+            
+            <Label Foreground="Red" x:Name="hasloLabel" Content="" Margin="10,165,10,0" VerticalAlignment="Top" Visibility="Visible"/>
         </Grid>
 
     </Grid>

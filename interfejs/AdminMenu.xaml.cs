@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace interfejs
 {
@@ -39,6 +31,7 @@ namespace interfejs
             updateUsers();
         }
 
+        //jesli zakończymy pracę w tym okienku, to po kliknięciu OK nasze zmiany zostają wysłane do bazy danych (robim update) 
         private void okBtn_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -64,6 +57,7 @@ namespace interfejs
             this.Close();
         }
 
+        //gdy wybierzemy z listy innego użytkownika
         private void listaUzytkownikow_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (((Owner as MainWindow).usr.etykieta < 0) && showPass.Visibility == Visibility.Hidden)
@@ -83,12 +77,14 @@ namespace interfejs
             }
         }
 
+        //jeśli zmienimy slider do sterowania etykietami
         private void sliderEtykiet_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (listaUzytkownikow.SelectedItem != null)
                 selected.etykieta = (int)(sliderEtykiet.Value);
         }
 
+        //jeżeli chcemy usunąć istniejącego użytkownika :(
         private void usunBtn_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -196,7 +192,7 @@ namespace interfejs
             var name = listaUzytkownikow.SelectedItem;
             if (name != null)
             {
-                var resetWindow = new PassReset(selected,dbConnection);
+                var resetWindow = new PassReset(selected, dbConnection);
                 resetWindow.Owner = this;
                 resetWindow.ShowDialog();
             }

@@ -25,5 +25,6 @@ E:\Studia\repo\interfejs\interfejs\obj\Debug\interfejs.exe
 E:\Studia\repo\interfejs\interfejs\obj\Debug\interfejs.pdb
 E:\Studia\repo\interfejs\interfejs\obj\Debug\PassReset.g.cs
 E:\Studia\repo\interfejs\interfejs\obj\Debug\PassReset.baml
-E:\Studia\repo\interfejs\interfejs\bin\Debug\interfejs.exe.CodeAnalysisLog.xml
-E:\Studia\repo\interfejs\interfejs\bin\Debug\interfejs.exe.lastcodeanalysissucceeded
+E:\Studia\repo\interfejs\interfejs\obj\Debug\interfejs.csprojResolveAssemblyReference.cache
+E:\Studia\repo\interfejs\interfejs\obj\Debug\RowEdit.g.cs
+E:\Studia\repo\interfejs\interfejs\obj\Debug\RowEdit.baml

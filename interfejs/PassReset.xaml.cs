@@ -18,8 +18,6 @@ namespace interfejs
     /// <summary>
     /// Interaction logic for PassReset.xaml
     /// </summary>
-
-
     public partial class PassReset : Window
     {
         User who;
@@ -37,29 +35,33 @@ namespace interfejs
             Close();
         }
 
+        //resetowanie hasła
         private void resetButton_Click(object sender, RoutedEventArgs e)
         {
             string pass = passBox.Password;
-            if(pass == passBox2.Password)
+            if (pass == passBox2.Password)
             {
                 this.info.Visibility = Visibility.Hidden;
-                pass = Encryptor.Encrypt(pass,who.login);
-               
+                //zaszyfruj
+                pass = Encryptor.Encrypt(pass, who.login);
+
+                //ustawiamy skrypt
                 String query = $"UPDATE UZYTKOWNIK SET HASLO='{pass}' WHERE [ID_UZYTKOWNIKA] like '{who.id}'";
-                SqlCommand cmd = new SqlCommand(query,con);
+                SqlCommand cmd = new SqlCommand(query, con);
                 try
                 {
+                    //wysyłamy skrypt na serwer
                     con.Open();
                     cmd.ExecuteNonQuery();
                     con.Close();
                     who.pass = pass;
                     this.Close();
-                }   
-                catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     con.Close();
                     MessageBox.Show(ex.Message);
-                }            
+                }
 
             }
             else

@@ -36,6 +36,7 @@ namespace interfejs
             pass = this.passwordBox.Password;
 
             MainWindow mainWindow = Owner as MainWindow;
+            //furtka programisty do testowania (gdy podamy dane do logowania admin : admin dostajemy uprawnienia super usera, który może wszystko)
             if (login == "admin" && pass == "admin")
             {
                 mainWindow.usr = new CurrentUser(0, "", "", "super", "user", "SU", -1);
@@ -43,8 +44,9 @@ namespace interfejs
             }
             //wycyckanie użytkownika z bazy danych
             //TO DO
+            //zaszyfrowanie hasła
             pass = Encryptor.Encrypt(pass, login);
-                try
+            try
             {
                 String query = $"SELECT * FROM UZYTKOWNIK WHERE [LOGIN] like '{login}' AND [HASLO] like '{pass}'";
                 SqlCommand cmd = new SqlCommand(query, con);
@@ -53,18 +55,18 @@ namespace interfejs
                 SqlDataReader reader;
                 reader = cmd.ExecuteReader();
                 reader.Read();
-                mainWindow.usr = new CurrentUser(reader.GetInt32(0),reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetInt32(6));
+                mainWindow.usr = new CurrentUser(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetInt32(6));
                 reader.Close();
                 con.Close();
 
             }
             catch (Exception ex)
             {
-                //MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message);
                 con.Close();
             }
-            
-            
+
+
 
             //jeśli się udało
             if (mainWindow.usr != null)
@@ -82,6 +84,7 @@ namespace interfejs
             loginBox.SelectAll();
         }
 
+        //obsługa kliknięć klawiatury
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)

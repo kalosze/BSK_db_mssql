@@ -32,6 +32,7 @@ namespace interfejs
             updateTables();
         }
 
+        //jeżeli jesteśmy zadowoleni z wprowadzonych zmian, klikamy ok i wysyłamy na serwer
         private void okBtn_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -60,6 +61,7 @@ namespace interfejs
             this.Close();
         }
 
+        //anulujemy zmiany (cofa wprowadzone zmiany w Etykietach użytkowników)
         private void anulujBtn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();

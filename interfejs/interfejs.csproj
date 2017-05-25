@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -62,10 +63,6 @@
     <Compile Include="AddNewRecord.xaml.cs">
       <DependentUpon>AddNewRecord.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Database.cs" />
-    <Compile Include="DelayedTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Encryptor.cs" />
     <Compile Include="Others\Ocena.cs" />
     <Compile Include="Others\Prowadzi.cs" />
@@ -74,6 +71,9 @@
     </Compile>
     <Compile Include="Others\Przedmiot.cs" />
     <Compile Include="Others\Uczen.cs" />
+    <Compile Include="RowEdit.xaml.cs">
+      <DependentUpon>RowEdit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="User\CurrentUser.cs" />
     <Compile Include="tableControl.xaml.cs">
       <DependentUpon>tableControl.xaml</DependentUpon>
@@ -87,6 +87,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PassReset.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RowEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -157,7 +161,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

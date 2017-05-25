@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -38,6 +39,7 @@ namespace interfejs
             CreateFields();
         }
 
+        //to samo co w AddNewRecord
         private void CreateFields()
         {
             var top = 31;
@@ -107,6 +109,7 @@ namespace interfejs
             anulujBtn.Margin = new Thickness(cancelMargin.Left, top * forHeight + 5 - anulujBtn.Height, cancelMargin.Right, cancelMargin.Bottom);
         }
 
+        //akceptujemy, więc szukamy
         private void szukajBtn_Click(object sender, RoutedEventArgs e)
         {
             MainWindow mainWindow = Owner as MainWindow;
@@ -116,6 +119,7 @@ namespace interfejs
             String query = $"SELECT * FROM {selectedTable} WHERE ";
             bool first = true;
             int noKey = keys[columns[0]] ? 0 : 1;
+            SqlCommand cmd = new SqlCommand(query, con);
             for (var i = 0; i < columns.Count; ++i)
             {
                 if (keys[columns[i]])
@@ -136,7 +140,9 @@ namespace interfejs
                         }
                         else
                             first = false;
-                        query += $"[{columns[i]}] like convert(date,'{a}',103)";
+                        query += $"[{columns[i]}] like @date";
+                        cmd.Parameters.Add("@date",SqlDbType.Date);
+                        cmd.Parameters["@date"].Value = a;
                         break;
                     case "text":
                         a = ((TextBox)((Grid)searchGrid.Children[i + 1 + noKey]).Children[1]).Text;
@@ -147,7 +153,10 @@ namespace interfejs
                             query += $" AND ";
                         else
                             first = false;
-                        query += $"[{columns[i]}] like '%{a}%'";
+                        query += $"[{columns[i]}] like @text{i}";
+                        cmd.Parameters.Add($"@text{i}", SqlDbType.Text);
+                        //% oznaczają że wystarczy częściowe dopasowanie
+                        cmd.Parameters[$"@text{i}"].Value = $"%{a}%";
                         break;
                     default:
                         a = ((TextBox)((Grid)searchGrid.Children[i + 1 + noKey]).Children[1]).Text;
@@ -158,7 +167,9 @@ namespace interfejs
                             query += $" AND ";
                         else
                             first = false;
-                        query += $"[{columns[i]}] like '{a}'";
+                        query += $"[{columns[i]}] like @def{i}";
+                        cmd.Parameters.AddWithValue($"@def{i}", a);
+
                         break;
                 }
                 // propertisy[i].SetValue(record, ((TextBox)((Grid)addRecord.Children[i + 1 + noKey]).Children[1]).Text);
@@ -168,11 +179,14 @@ namespace interfejs
             {
                 query = $"SELECT * FROM {selectedTable}";
             }
-            SqlCommand cmd = new SqlCommand(query, con);
+            
             try
             {
+                //wysyłamy skrypt do bazy danych
                 con.Open();
-                var dataAdapter = new SqlDataAdapter(query, con);
+                cmd.CommandText = query;
+                var dataAdapter = new SqlDataAdapter(cmd);
+      
                 System.Data.DataTable ds = new System.Data.DataTable();
                 dataAdapter.Fill(ds);
                 mainWindow.dataGrid.ItemsSource = ds.DefaultView;
